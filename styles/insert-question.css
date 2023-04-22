@@ -1,0 +1,39 @@
+* {
+    font-family: Helvetica;
+    font-size: 25px;
+    color: white;
+    letter-spacing: 0.25px;
+}
+body, textarea {
+    background-color: #212529;
+}
+input[type=submit] {
+    margin-top: 10px;
+    background-color: #17181a;
+    border-style: solid;
+}
+input[type=submit]:active {
+    background-color: #121212;
+    
+}
+input[type=file] {
+    background-color: #212529 !important;
+}
+form {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+    width: 100%
+}
+form > * {
+    width: 50%;
+}
+label {
+    text-align: center;
+}
+textarea {
+    font-size: small;
+    height: 60px;
+}

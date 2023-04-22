@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+    <head>
+        <title>Wybierz tryb</title>
+        <meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="styles/select-mode.css">
+    </head>
+    <body>
+        <form method="POST" action="answer-question.php">
+            <button type="submit" name="mode" value="random">Losowo</button>
+            <button type="submit" name="mode" value="worst">Najgorszy współczynnik odpowiedzi</button>
+            <button type="submit" name="mode" value="optimal">Optymalnie pod kątem zapamiętywania</button>
+        </form>
+    </body>
+</html>
