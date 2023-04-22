@@ -1,0 +1,101 @@
+{
+	"tableName": "questions",
+	"columns": [
+		{
+			"Field": "id",
+			"Type": "int(11)",
+			"Null": "NO",
+			"Key": "PRI",
+			"Default": null,
+			"Extra": "auto_increment"
+		},
+		{
+			"Field": "content",
+			"Type": "text",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "has_img",
+			"Type": "tinyint(1)",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "img_path",
+			"Type": "text",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "correct_answer",
+			"Type": "text",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "wrong_answer1",
+			"Type": "text",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "wrong_answer2",
+			"Type": "text",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "wrong_answer3",
+			"Type": "text",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		{
+			"Field": "views",
+			"Type": "int(11)",
+			"Null": "YES",
+			"Key": "",
+			"Default": "0",
+			"Extra": ""
+		},
+		{
+			"Field": "correct_answers",
+			"Type": "int(11)",
+			"Null": "YES",
+			"Key": "",
+			"Default": "0",
+			"Extra": ""
+		},
+		{
+			"Field": "correct_answers_streak",
+			"Type": "int(11)",
+			"Null": "YES",
+			"Key": "",
+			"Default": "0",
+			"Extra": ""
+		},
+		{
+			"Field": "repetition_time",
+			"Type": "datetime",
+			"Null": "YES",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		}
+	]
+}
