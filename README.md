@@ -2,7 +2,8 @@
 Profession Exam Learning app made for my preparation to this exam.
 It has learning 3 modes.
 # Disclaimer
-There is missing db-config.php file, but there is table_schema.json file with structure of the database.
+There is missing db-config.php file which should contain constants mentioned in connection.php file in connection function.
+There is table_schema.json file with structure of the database.
 # Preview
 ![image](https://github.com/adamusek-007/App-Egzamin-Zawodowy/assets/122128430/ae512dbb-cc53-4485-8000-d88624c00fe3)
 ## Wstawianie pytania:
