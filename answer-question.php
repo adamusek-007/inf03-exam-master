@@ -22,15 +22,16 @@
     }
     $query = getQuery($mode);
 
-    $result = mysqli_query($connection, $query);
-    if (mysqli_num_rows($result) == 0) {
+    $result = $connection->query($query);
+    $rowCount = $result->num_rows;
+    if ($rowCount == 0) {
         $result_avability = false;
-        $result = mysqli_query($connection, "SELECT * FROM `questions` WHERE `repetition_time` < now() OR `repetition_time` IS NULL ORDER BY RAND() LIMIT 1;");
+        $result = $connection->query("SELECT * FROM `questions` WHERE `repetition_time` < now() OR `repetition_time` IS NULL ORDER BY RAND() LIMIT 1;");
     } else {
         $result_avability = true;
     }
 
-    $row = mysqli_fetch_assoc($result);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
     $ans1 = htmlspecialchars(str_replace("\"", "'", $row['c_answer']));
     $ans2 = htmlspecialchars(str_replace("\"", "'", $row['w_answer_1']));
     $ans3 = htmlspecialchars(str_replace("\"", "'", $row['w_answer_2']));
@@ -53,9 +54,9 @@
     <form id="form" action="answer-question.php" method="post" class="first-site-form">
 
         <?php
-        if ($result_avability != true) {
-            echo "<label>Pytania z podanych warunków są nie dostępne</label>";
-        }
+        // if ($result_avability != true) {
+        //     echo "<label>Pytania z podanych warunków są nie dostępne</label>";
+        // }
         ?>
         <label for="user-answer">
             <?php echo htmlspecialchars("${row['title']}") ?>
@@ -104,7 +105,6 @@
             Id pytania:
             <?php
             echo $row["id"];
-            mysqli_close($connection);
             ?>
         </div>
     </details>

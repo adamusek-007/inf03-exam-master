@@ -26,7 +26,7 @@ $w_answer1 = $_POST["w-answer-1"];
 $w_answer2 = $_POST["w-answer-2"];
 $w_answer3 = $_POST["w-answer-3"];
 
-$query = "INSERT INTO `questions` (`title`, `has_img`, `img_path`, `correct_answer`, `wrong_answer1`, `wrong_answer2`, `wrong_answer3`) VALUES ('${content}', '${file_attached}', '${img_path}', '${correct_answer}', '${w_answer1}', '${w_answer2}', '${w_answer3}')";
+$query = "INSERT INTO `questions` (`title`, `has_img`, `img_path`, `correct_answer`, `wrong_answer1`, `wrong_answer2`, `wrong_answer3`) VALUES ('{$content}', '{$file_attached}', '{$img_path}', '{$correct_answer}', '{$w_answer1}', '{$w_answer2}', '{$w_answer3}')";
 
 $connector = new Connector();
 $connection = $connector->getConnectionToDatabase();

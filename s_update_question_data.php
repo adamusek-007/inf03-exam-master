@@ -8,7 +8,7 @@ $c_answer = $_GET["c-answer"];
 $connector = new Connector();
 $connection = $connector->getConnectionToDatabase();
 
-$query = "SELECT `u_views`, `u_c_answers`, `u_c_answers_streak` FROM `questions` WHERE `id`= ${q_id}";
+$query = "SELECT `u_views`, `u_c_answers`, `u_c_answers_streak` FROM `questions` WHERE `id`= {$q_id}";
 $result = mysqli_query($connection, $query);
 $row = mysqli_fetch_assoc($result);
 $views = $row["u_views"];
@@ -23,7 +23,7 @@ if ($u_answer == $c_answer) {
     $c_answers_streak = 0;
 }
 $formated_date_time = getNextRepeatTime($c_answers_streak);
-$update_query = "UPDATE `questions` SET `u_views`=\"${views}\",`u_c_answers`=\"${c_answers}\", `u_c_answers_streak`=\"${c_answers_streak}\", `repetition_time`=\"${formated_date_time}\" WHERE `id`= ${q_id};";
+$update_query = "UPDATE `questions` SET `u_views`=\"{$views}\",`u_c_answers`=\"{$c_answers}\", `u_c_answers_streak`=\"{$c_answers_streak}\", `repetition_time`=\"{$formated_date_time}\" WHERE `id`= {$q_id};";
 mysqli_query($connection, $update_query);
 
 function getNextRepeatTime($c_answers_streak)
