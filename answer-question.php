@@ -23,7 +23,7 @@
     $query = getQuery($mode);
 
     $result = $connection->query($query);
-    $rowCount = $result->num_rows;
+    $rowCount = $result->rowCount();
     if ($rowCount == 0) {
         $result_avability = false;
         $result = $connection->query("SELECT * FROM `questions` WHERE `repetition_time` < now() OR `repetition_time` IS NULL ORDER BY RAND() LIMIT 1;");
