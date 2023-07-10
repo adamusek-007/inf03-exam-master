@@ -59,12 +59,12 @@
         // }
         ?>
         <label for="user-answer">
-            <?php echo htmlspecialchars("${row['title']}") ?>
+            <?php echo htmlspecialchars("{$row['title']}") ?>
         </label>
         <?php
         if ($row['has_img'] == 1) {
             $img = $row['img_path'];
-            echo "<img alt=\"zadanie\" src='./${img}.jpg'>";
+            echo "<img alt=\"zadanie\" src='./{$img}.jpg'>";
         }
         ?>
         <fieldset id="user-answer">
