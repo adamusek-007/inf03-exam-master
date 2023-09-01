@@ -1,5 +1,5 @@
 <?php
-
+include ("db_credentials.php");
 class Connector
 {
     function getConnectionToDatabase(): PDO
