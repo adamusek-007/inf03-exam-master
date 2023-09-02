@@ -21,9 +21,8 @@ function makeAjaxRequest(formData) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log("AJAX request complete");
       console.log(response);
-      $("#form")[0].reset();
+      // $("#form")[0].reset();
     },
     error: function (error) {
       console.log("AJAX request error");
