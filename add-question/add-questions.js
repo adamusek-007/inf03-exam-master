@@ -12,12 +12,14 @@ $(document).ready(function () {
     });
 
     if (allFieldsFilled) {
-      var formData = $(this).serialize();
+      var formData = new FormData(this);
 
       $.ajax({
         type: "POST",
         url: "s_insert-questions.php",
         data: formData,
+        processData: false,
+        contentType: false,
         success: function (response) {
           console.log("AJAX request complete");
           console.log(response);
@@ -28,6 +30,8 @@ $(document).ready(function () {
           console.log(error);
         }
       });
+    } else {
+      alert ("Please fill out all required fields before submitting.");
     }
   })
 });
