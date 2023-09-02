@@ -21,7 +21,7 @@ $(document).ready(function () {
         success: function (response) {
           console.log("AJAX request complete");
           console.log(response);
-          $("#form").reset();
+          $("#form")[0].reset();
         },
         error: function (error) {
           console.log("AJAX request error");
