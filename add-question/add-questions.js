@@ -21,11 +21,15 @@ function makeAjaxRequest(formData) {
     processData: false,
     contentType: false,
     success: function (response) {
-      console.log(response);
-      // $("#form")[0].reset();
+      if (response == 0)  {
+        $("#form")[0].reset();
+      } else {
+        alert(response);
+        console.log(response);
+      }
     },
     error: function (error) {
-      console.log("AJAX request error");
+      console.log("AJAX request error:");
       console.log(error);
     }
   });

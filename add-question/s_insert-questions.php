@@ -61,7 +61,6 @@ function insertAnswers($query)
     $connector = new Connector();
     $connection = $connector->getConnectionToDatabase();
     $result = $connection->query($query);
-    $row = $result->fetch();
 }
 function getQuestionInsertQuery($has_image)
 {
@@ -78,6 +77,7 @@ function insertData($has_image)
     $question_id = insertQuestion($query);
     $query = getAnswersInsertQuery($question_id);
     insertAnswers($query);
+    echo 0;
 }
 
 $is_data_complete = checkIsDataComplete();
@@ -89,14 +89,14 @@ if ($is_data_complete) {
             uploadImage();
             insertData(1);
         } else {
-            echo "Errno: 1: Typ pliku nie jest obsługiwany.";
+            echo "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.";
             exit;
         }
     } else {
         insertData(0);
     }
 } else {
-    echo "Errno: 2 - Wymagane pola nie są wypełnione.";
+    echo "Wymagane pola nie są wypełnione.";
     exit;
 }
 ?>
