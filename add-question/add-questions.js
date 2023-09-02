@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     var allFieldsFilled = true;
 
-    $(this).find(":input[required]").each(function () {
+    $(this).find("textarea").each(function () {
       if ($(this).val() === "") {
         allFieldsFilled = false;
         return false;
