@@ -1,5 +1,13 @@
 <?php
-include("connection.php");
+include("../connection.php");
+$answer = $_POST['usr_respo'];
+$ques_id = $_COOKIE['ques_id'];
+setcookie("ques_id","", time() -1, "/");
+$answer = str_replace("\"", '\"',$answer);
+$query = "CALL addQuestionReply({$ques_id}, \"{$answer}\");";
+$connection = getConnectionToDatabase();
+$connection->query($query);
+echo 0;
 
 // $u_answer = $_GET["answer"];
 // $q_id = $_GET["q-id"];
