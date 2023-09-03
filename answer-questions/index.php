@@ -1,43 +1,5 @@
 ﻿<?php
-include("../connection.php");
-session_start();
-$connector = new Connector();
-$connection = $connector->getConnectionToDatabase();
-if (isset($_POST["mode"])) {
-    $mode = $_SESSION["mode"] = $_POST["mode"];
-} else {
-    $mode = $_SESSION["mode"];
-}
-$query = getQuery($mode);
-
-$result = $connection->query($query);
-$rowCount = $result->rowCount();
-if ($rowCount == 0) {
-    $result_avability = false;
-    $result = $connection->query("SELECT * FROM `questions` WHERE `repetition_time` < now() OR `repetition_time` IS NULL ORDER BY RAND() LIMIT 1;");
-} else {
-    $result_avability = true;
-}
-
-$row = $result->fetch(PDO::FETCH_ASSOC);
-$ans1 = htmlspecialchars(str_replace("\"", "'", $row['c_answer']));
-$ans2 = htmlspecialchars(str_replace("\"", "'", $row['w_answer_1']));
-$ans3 = htmlspecialchars(str_replace("\"", "'", $row['w_answer_2']));
-$ans4 = htmlspecialchars(str_replace("\"", "'", $row['w_answer_3']));
-$answers_array = array();
-array_push($answers_array, $ans1, $ans2, $ans3, $ans4);
-
-function getQuery($mode)
-{
-    if ($mode == "random") {
-        return "SELECT * FROM `questions` ORDER BY RAND() LIMIT 1;";
-    } else if ($mode == "worst") {
-        return "SELECT * FROM `questions` WHERE `u_c_answers`/`u_views` < 0.9 ORDER BY RAND() LIMIT 1;";
-    } else if ($mode == "optimal") {
-        return "SELECT * FROM `questions` WHERE `u_views`!=0 AND `repetition_time` < now() ORDER BY `repetition_time` ASC LIMIT 1;";
-    }
-}
-
+include ("answer-questions.php")
 ?>
 <form id="form" action="answer-question.php" method="post" class="first-site-form">
 
