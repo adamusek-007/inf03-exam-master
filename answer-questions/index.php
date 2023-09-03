@@ -18,11 +18,7 @@ include("answer-questions.php");
         <label for="user-answer">
             <?=htmlspecialchars($ques_content)?>
         </label>
-        <?php
-        if (!is_null($image_path)) {
-            echo "<img alt=\"zdjecie do zadania\" src=\"../images/{$image_path}\"'>";
-        }
-        ?>
+        <?=printImage($image_path)?>
         <fieldset id="user-answer">
             <legend>Wybierz odpowiedź</legend>
             <?=printAnswers($answers_array)?>

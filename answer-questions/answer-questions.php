@@ -31,3 +31,9 @@ function printAnswers($answers_array)
         echo "<input type=\"button\" onclick=\"checkAndSubmit(this.value)\" name=\"user-answer\" value=\"{$answer}\"><br>";
     }
 }
+
+function printImage($image_path) {
+    if (!is_null($image_path)) {
+        echo "<img alt=\"zdjecie do zadania\" src=\"../images/{$image_path}\"'>";
+    }
+}
