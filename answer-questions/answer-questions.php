@@ -7,6 +7,7 @@ $result = $connection->query($q_question);
 $row = $result->fetch(PDO::FETCH_ASSOC);
 $ques_content = $row['content'];
 $ques_id = $row['id'];
+setcookie("ques_id", "", time() -1);
 setcookie("ques_id", $ques_id);
 $image_path = $row['image_path'];
 $q_answers = "CALL getAnswersRelatedToQuestion({$ques_id});";
