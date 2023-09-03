@@ -26,7 +26,7 @@ label {
     background-color: #17181a;
     /* white-space: pre-wrap; */
 }
-input[type="submit"] {
+input[type="button"] {
     margin-bottom: 10px;
     height: fit-content;
     padding: 15px;
@@ -36,7 +36,7 @@ input[type="submit"] {
     white-space: pre-wrap;
     text-align: left;
 }
-input[type="submit"]:hover {
+input[type="button"]:hover {
     background-color: #121212;
 }
 img{
