@@ -7,6 +7,7 @@ $result = $connection->query($q_question);
 $row = $result->fetch(PDO::FETCH_ASSOC);
 $ques_content = $row['content'];
 $ques_id = $row['id'];
+setcookie("ques_id", $ques_id);
 $image_path = $row['image_path'];
 $q_answers = "CALL getAnswersRelatedToQuestion({$ques_id});";
 $result = $connection->query($q_answers);
@@ -24,7 +25,6 @@ function getAnswersArray($result)
 }
 function printAnswers($answers_array)
 {
-    
     foreach ($answers_array as $answer) {
         $answer = htmlspecialchars($answer);
         echo "<input type=\"button\" onclick=\"checkAndSubmit(this.value)\" name=\"user-answer\" value=\"{$answer}\"><br>";
