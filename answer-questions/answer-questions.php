@@ -12,7 +12,7 @@ $q_answers = "CALL getAnswersRelatedToQuestion({$ques_id});";
 $result = $connection->query($q_answers);
 
 $answers_array = getAnswersArray($result);
-
+shuffle($answers_array);
 function getAnswersArray($result)
 {
     $i = 0;
@@ -22,14 +22,11 @@ function getAnswersArray($result)
     }
     return $answers_array;
 }
-function randomizeAnswers($answers_array) {
-    return array_rand($answers_array);
-}
 function printAnswers($answers_array)
 {
     
     foreach ($answers_array as $answer) {
-        $content = $answer->getContent();
-        echo "<input type=\"submit\" onclick=\"checkAndSubmit(this)\" name=\"user-answer\" value=\"{$content}\"><br>";
+        $answer = htmlspecialchars($answer);
+        echo "<input type=\"button\" onclick=\"checkAndSubmit(this.value)\" name=\"user-answer\" value=\"{$answer}\"><br>";
     }
 }
