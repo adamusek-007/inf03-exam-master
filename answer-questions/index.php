@@ -10,30 +10,23 @@ include("answer-questions.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="../styles/answer-question.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 </head>
 
 <body>
-    <form id="form" action="answer-question.php" method="post" class="first-site-form">
+    <form id="form" action="index.php" method="post" class="first-site-form">
         <label for="user-answer">
             <?=htmlspecialchars($ques_content)?>
         </label>
         <?php
-        if (!is_null($row['image_path'])) {
-            $img = $row['image_path'];
-            echo "<img alt=\"zdjecie do zadania\" src=\"../images/{$img}\"'>";
+        if (!is_null($image_path)) {
+            echo "<img alt=\"zdjecie do zadania\" src=\"../images/{$image_path}\"'>";
         }
         ?>
         <fieldset id="user-answer">
             <legend>Wybierz odpowiedź</legend>
-            <?php
-            foreach ($answers_array as $a) {
-                $random_array_id = array_rand($answers_array, 1);
-                $value = $answers_array[$random_array_id];
-                unset($answers_array[$random_array_id]);
-                echo '<input type="submit" onclick="checkAndSubmit(this)" name="user-answer" value="' . $value . '">' . "<br>";
-            }
-            ?>
-            <input type="submit" onclick="checkAndSubmit(this)" name="user-answer" value="Nie wiem">
+            <?=printAnswers($answers_array)?>
+            <input type="button" onclick="(checkAndSubmit(this.value))" name="user-answer" value="Nie wiem">
         </fieldset>
     </form>
     <script src="check-answer-and-submit.js"></script>
