@@ -34,8 +34,7 @@ function uploadImage()
 
 function insertQuestion($query)
 {
-    $connector = new Connector();
-    $connection = $connector->getConnectionToDatabase();
+    $connection = getConnectionToDatabase();
     $connection->query($query);
     $result = $connection->query("CALL getLatestAddedQuestionId();");
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -58,8 +57,7 @@ function getAnswersInsertQuery($question_id)
 }
 function insertAnswers($query)
 {
-    $connector = new Connector();
-    $connection = $connector->getConnectionToDatabase();
+    $connection = getConnectionToDatabase();
     $result = $connection->query($query);
 }
 function getQuestionInsertQuery($has_image)

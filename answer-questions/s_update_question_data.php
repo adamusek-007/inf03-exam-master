@@ -5,8 +5,7 @@ $u_answer = $_GET["answer"];
 $q_id = $_GET["q-id"];
 $c_answer = $_GET["c-answer"];
 
-$connector = new Connector();
-$connection = $connector->getConnectionToDatabase();
+$connection = getConnectionToDatabase();
 
 $query = "SELECT `u_views`, `u_c_answers`, `u_c_answers_streak` FROM `questions` WHERE `id`= {$q_id}";
 $result = mysqli_query($connection, $query);
