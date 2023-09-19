@@ -1,16 +1,29 @@
 <?php
-include("db-config.php");
+include("db-config.php");/**
+* Creates PDO connection Data Source Name (DSN).
+* 
+* @return string The PDO DSN.
+*/
+function create_dsn() {
+   $dsn_format = "mysql:host=%s;dbname=%s;port=%s;charset=UTF8";
+   return sprintf($dsn_format, DB_HOST, DB_NAME, DB_PORT);
+}
+
+/**
+* Gets a PDO database connection.
+*
+* @return PDO|null A PDO database connection object, or null on failure.
+*/
 function get_database_connection(): PDO
 {
-    static $pdo;
-    if (!$pdo) {
-        $pdo = new PDO(
-            sprintf("mysql:host=%s;dbname=%s;charset=UTF8", DB_HOST, DB_NAME),
-            DB_USER,
-            DB_PASSWORD,
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
-    }
-    return $pdo;
+   static $pdo;
+   if (!$pdo) {
+       try {
+           $pdo = new PDO(create_dsn(),DB_USER, DB_PASSWORD);
+           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       } catch (PDOException) {
+           exit;
+       }
+   }
+   return $pdo;
 }
-?>
