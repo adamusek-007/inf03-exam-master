@@ -16,7 +16,7 @@ $(document).ready(function () {
 function makeAjaxRequest(formData) {
   $.ajax({
     type: "POST",
-    url: "s_insert-questions.php",
+    url: "s-insert-questions.php",
     data: formData,
     processData: false,
     contentType: false,

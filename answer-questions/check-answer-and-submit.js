@@ -5,7 +5,7 @@ $('#myForm').submit(function (event) {
 function checkAndSubmit(userAnswer) {
     $.ajax({
         type: "POST",
-        url: "s_update_question_data.php",
+        url: "s-update-question-data.php",
         data: { usr_respo: userAnswer },
         success: function (response) {
             var is_correct = response.substr(0,1);

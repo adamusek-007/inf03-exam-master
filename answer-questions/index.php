@@ -18,10 +18,10 @@ include("answer-questions.php");
         <label for="user-answer">
             <?=htmlspecialchars($ques_content)?>
         </label>
-        <?=printImage($image_path)?>
+        <?=print_image($image_path)?>
         <fieldset id="user-answer">
             <legend>Wybierz odpowiedź</legend>
-            <?=printAnswers($answers_array)?>
+            <?=print_answers($answers_array)?>
             <input type="button" onclick="(checkAndSubmit(this.value))" name="user-answer" value="Nie wiem">
         </fieldset>
     </form>

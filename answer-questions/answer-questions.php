@@ -2,7 +2,7 @@
 include("../connection.php");
 
 $q_question = "SELECT * FROM getRandomQuestion;";
-$connection = getConnectionToDatabase();
+$connection = get_database_connection();
 $result = $connection->query($q_question);
 $row = $result->fetch(PDO::FETCH_ASSOC);
 $ques_content = $row['content'];
@@ -13,9 +13,9 @@ $image_path = $row['image_path'];
 $q_answers = "CALL getAnswersRelatedToQuestion({$ques_id});";
 $result = $connection->query($q_answers);
 
-$answers_array = getAnswersArray($result);
+$answers_array = get_answers_array($result);
 shuffle($answers_array);
-function getAnswersArray($result)
+function get_answers_array($result)
 {
     $i = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -24,7 +24,7 @@ function getAnswersArray($result)
     }
     return $answers_array;
 }
-function printAnswers($answers_array)
+function print_answers($answers_array)
 {
     foreach ($answers_array as $answer) {
         $answer = htmlspecialchars($answer);
@@ -32,7 +32,7 @@ function printAnswers($answers_array)
     }
 }
 
-function printImage($image_path) {
+function print_image($image_path) {
     if (!is_null($image_path)) {
         echo "<img alt=\"zdjecie do zadania\" src=\"../images/{$image_path}\"'>";
     }

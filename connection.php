@@ -1,6 +1,6 @@
 <?php
-include("db_credentials.php");
-function getConnectionToDatabase(): PDO
+include("db-config.php");
+function get_database_connection(): PDO
 {
     static $pdo;
     if (!$pdo) {

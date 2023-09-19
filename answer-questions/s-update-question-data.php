@@ -6,7 +6,7 @@ setcookie("ques_id", "", time() - 1, "/");
 
 $answer = str_replace("\"", '\"', $answer);
 
-$connection = getConnectionToDatabase();
+$connection = get_database_connection();
 
 $query = "CALL addUserDataAboutQuestion({$ques_id}, \"{$answer}\");";
 $connection->query($query);

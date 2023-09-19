@@ -1,6 +1,6 @@
 <?php
 include("../connection.php");
-function checkIsDataComplete()
+function check_data_completion()
 {
     $form_fields = ["content", "c-answer", "w-answer-1", "w-answer-2", "w-answer-3"];
 
@@ -11,7 +11,7 @@ function checkIsDataComplete()
     }
     return true;
 }
-function checkIsImageAttached()
+function check_image_attachment()
 {
     if ($_FILES["image"]["name"] == "") {
         return false;
@@ -19,28 +19,28 @@ function checkIsImageAttached()
         return true;
     }
 }
-function checkIsImageTypeCorrect()
+function check_image_type_correctness()
 {
     $supported_file_types = ["image/jpeg", "image/jpg", "image/png"];
     $uploaded_file_type = $_FILES["image"]["type"];
     return in_array($uploaded_file_type, $supported_file_types);
 }
-function uploadImage()
+function upload_image()
 {
     $target_dir = "../images/";
     $target_file = $target_dir . basename($_FILES["image"]["name"]);
     $result = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 }
 
-function insertQuestion($query)
+function insert_question($query)
 {
-    $connection = getConnectionToDatabase();
+    $connection = get_database_connection();
     $connection->query($query);
     $result = $connection->query("CALL getLatestAddedQuestionId();");
     $row = $result->fetch(PDO::FETCH_ASSOC);
     return $row['id'];
 }
-function getAnswersInsertQuery($question_id)
+function get_answers_insert_query($question_id)
 {
     $query = "";
     $q_add_answer = "CALL addAnswer(%d, \"%s\", %d);";
@@ -55,12 +55,12 @@ function getAnswersInsertQuery($question_id)
     return $query;
 
 }
-function insertAnswers($query)
+function insert_answers($query)
 {
-    $connection = getConnectionToDatabase();
+    $connection = get_database_connection();
     $result = $connection->query($query);
 }
-function getQuestionInsertQuery($has_image)
+function get_question_insert_query($has_image)
 {
     $q_add_question = "CALL addQuestion(\"%s\", %d, \"%s\");";
     if ($has_image == 0) {
@@ -69,29 +69,29 @@ function getQuestionInsertQuery($has_image)
         return sprintf($q_add_question, $_POST['content'], $has_image, $_FILES["image"]["name"]);
     }
 }
-function insertData($has_image)
+function insert_data($has_image)
 {
-    $query = getQuestionInsertQuery($has_image);
-    $question_id = insertQuestion($query);
-    $query = getAnswersInsertQuery($question_id);
-    insertAnswers($query);
+    $query = get_question_insert_query($has_image);
+    $question_id = insert_question($query);
+    $query = get_answers_insert_query($question_id);
+    insert_answers($query);
     echo 0;
 }
 
-$is_data_complete = checkIsDataComplete();
+$is_data_complete = check_data_completion();
 if ($is_data_complete) {
-    $is_image_attached = checkIsImageAttached();
+    $is_image_attached = check_image_attachment();
     if ($is_image_attached) {
-        $is_image_type_correct = checkIsImageTypeCorrect();
+        $is_image_type_correct = check_image_type_correctness();
         if ($is_image_type_correct) {
-            uploadImage();
-            insertData(1);
+            upload_image();
+            insert_data(1);
         } else {
             echo "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.";
             exit;
         }
     } else {
-        insertData(0);
+        insert_data(0);
     }
 } else {
     echo "Wymagane pola nie są wypełnione.";
