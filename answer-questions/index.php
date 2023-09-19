@@ -9,7 +9,7 @@ include("answer-questions.php");
     <meta http-equiv="X-Ua-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../styles/answer-question.css">
+    <link rel="stylesheet" href="../resources/styles/answer-question.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 </head>
 

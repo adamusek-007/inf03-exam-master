@@ -34,6 +34,6 @@ function print_answers($answers_array)
 
 function print_image($image_path) {
     if (!is_null($image_path)) {
-        echo "<img alt=\"zdjecie do zadania\" src=\"../images/{$image_path}\"'>";
+        echo "<img alt=\"zdjecie do zadania\" src=\"../resources/images/{$image_path}\"'>";
     }
 }

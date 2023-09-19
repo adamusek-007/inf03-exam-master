@@ -27,7 +27,7 @@ function check_image_type_correctness()
 }
 function upload_image()
 {
-    $target_dir = "../images/";
+    $target_dir = "../resources/images/";
     $target_file = $target_dir . basename($_FILES["image"]["name"]);
     $result = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 }
