@@ -1,5 +1,5 @@
 <?php
-include("../connection.php");
+include("../database/connection.php");
 function check_data_completion()
 {
     $form_fields = ["content", "c-answer", "w-answer-1", "w-answer-2", "w-answer-3"];

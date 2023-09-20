@@ -1,5 +1,5 @@
 <?php
-include("../connection.php");
+include("../database/connection.php");
 $answer = $_POST['usr_respo'];
 $ques_id = $_COOKIE['ques_id'];
 setcookie("ques_id", "", time() - 1, "/");

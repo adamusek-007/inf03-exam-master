@@ -1,5 +1,5 @@
 <?php
-include("../connection.php");
+include("../database/connection.php");
 
 $q_question = "SELECT * FROM getRandomQuestion;";
 $connection = get_database_connection();
