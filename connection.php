@@ -17,11 +17,13 @@ function create_dsn() {
 function get_database_connection(): PDO
 {
    static $pdo;
+   
    if (!$pdo) {
        try {
            $pdo = new PDO(create_dsn(),DB_USER, DB_PASSWORD);
            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-       } catch (PDOException) {
+       } catch (PDOException $exception) {
+           echo $exception;
            exit;
        }
    }
