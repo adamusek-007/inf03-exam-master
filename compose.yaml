@@ -7,10 +7,12 @@ services:
     ports:
       - 80:80
   app-mysql:
-    container_name: app-mysql
     image: mysql:8.0
+    container_name: app-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: egzamin_zawodowy
+    volumes:
+      - ./database/scripts/:/docker-entrypoint-initdb.d/
     ports:
       - 3306:3306
