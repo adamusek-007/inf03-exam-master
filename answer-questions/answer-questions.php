@@ -1,7 +1,7 @@
 <?php
 include("../database/connection.php");
 
-$q_question = "SELECT * FROM getRandomQuestion;";
+$q_question = "CALL getRandomQuestion();";
 $connection = get_database_connection();
 $result = $connection->query($q_question);
 $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -10,6 +10,7 @@ $ques_id = $row['id'];
 setcookie("ques_id", "", time() -1);
 setcookie("ques_id", $ques_id);
 $image_path = $row['image_path'];
+$result->closeCursor();
 $q_answers = "CALL getAnswersRelatedToQuestion({$ques_id});";
 $result = $connection->query($q_answers);
 
