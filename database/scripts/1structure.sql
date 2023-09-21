@@ -111,10 +111,8 @@ BEGIN
 	IF (answer_content != "Nie wiem") THEN 
 		SET answer_id = (SELECT answers.id FROM answers WHERE `content` = answer_content AND `ques_id` = ques_id LIMIT 1);
 		INSERT INTO users_data (`ques_id`, `answ_id`, `view_date_time`) VALUES (ques_id, answer_id, NOW());
-		SELECT `is_correct` FROM answers WHERE `id` = answer_id;
-	ELSE 
+	ELSE
 		INSERT INTO users_data (`ques_id`, `view_date_time`) VALUES (ques_id, NOW());
-        SELECT "0";
     END IF;
 END$$
 
@@ -155,6 +153,39 @@ USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getRandomQuestion` ()
 BEGIN
 SELECT * FROM `questions`order by rand() limit 1;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getAnswerCorrectness
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `egzamin_zawodowy`$$
+CREATE PROCEDURE `getAnswerCorrectness` (IN ques_id INT, IN answer_content MEDIUMTEXT)
+BEGIN
+	DECLARE answer_id INT;
+    
+	IF answer_content != "Nie wiem" THEN
+		SET answer_id = (SELECT answers.id FROM answers WHERE `content` = answer_content AND `ques_id` = question_id LIMIT 1);
+		SELECT `is_correct` FROM answers WHERE `id` = answer_id;
+    ELSE 
+		SELECT "0" AS `is_correct`;
+    END IF;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure getCorrectAnswerForQuestion
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `egzamin_zawodowy`$$
+CREATE PROCEDURE `getCorrectAnswerForQuestion` (IN question_id INT)
+BEGIN
+	SELECT `content` FROM `answers` WHERE `is_correct` = 1 AND `ques_id` = question_id;
 END$$
 
 DELIMITER ;
