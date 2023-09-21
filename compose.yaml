@@ -7,7 +7,7 @@ services:
     ports:
       - 80:80
   app-mysql:
-    image: mysql:8.0
+    build: ./database/
     container_name: app-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
