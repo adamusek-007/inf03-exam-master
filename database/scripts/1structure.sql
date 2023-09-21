@@ -163,7 +163,7 @@ DELIMITER ;
 
 DELIMITER $$
 USE `egzamin_zawodowy`$$
-CREATE PROCEDURE `getAnswerCorrectness` (IN ques_id INT, IN answer_content MEDIUMTEXT)
+CREATE PROCEDURE `getAnswerCorrectness` (IN question_id INT, IN answer_content MEDIUMTEXT)
 BEGIN
 	DECLARE answer_id INT;
     
