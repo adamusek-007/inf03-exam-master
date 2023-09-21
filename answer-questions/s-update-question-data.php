@@ -8,7 +8,7 @@ $answer = str_replace("\"", '\"', $answer);
 
 $connection = get_database_connection();
 
-$query = "CALL addUserDataAboutQuestion({$ques_id}, \"{$answer}\");";
+$query = "CALL addQuestionReply({$ques_id}, \"{$answer}\");";
 $connection->query($query);
 $query = "CALL getAnswerCorrectness({$ques_id}, \"{$answer}\");";
 $stmt = $connection->query($query);
