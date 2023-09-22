@@ -1,0 +1,20 @@
+* {
+    font-family: Helvetica;
+    font-size: 15px;
+    color: white;
+}
+body {
+    background-color: #212529;
+}
+
+.question-card + .question-card {
+    margin-top: 10px;
+}
+.question-card {
+    padding: 10px;
+    background-color: #17181a;
+}
+.question-content {
+    margin-bottom: 5px;
+    font-size: 18px;
+}
