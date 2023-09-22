@@ -1,3 +1,5 @@
+-- MySQL Workbench Forward Engineering
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -9,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema egzamin_zawodowy
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4;
+CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4 ;
 USE `egzamin_zawodowy` ;
 
 -- -----------------------------------------------------
@@ -66,12 +68,12 @@ USE `egzamin_zawodowy` ;
 
 DELIMITER $$
 USE `egzamin_zawodowy`$$
-CREATE PROCEDURE `addQuestion` (IN content MEDIUMTEXT, IN has_img TINYINT(1), IN img_path TINYTEXT)
+CREATE PROCEDURE `addQuestion` (IN in_content MEDIUMTEXT, IN in_has_img TINYINT(1), IN in_img_path TINYTEXT)
 BEGIN
-	IF has_img = 0 THEN
-		INSERT INTO `questions` (`content`) VALUES (content);
-    ELSEIF has_img = 1 THEN
-		INSERT INTO `questions` (`content`, `image_path`) VALUES (content, img_path);
+	IF in_has_img = 0 THEN
+		INSERT INTO `questions` (`content`) VALUES (in_content);
+    ELSEIF in_has_img = 1 THEN
+		INSERT INTO `questions` (`content`, `image_path`) VALUES (in_content, in_img_path);
     ELSE
 		SELECT "Nie udało się dodać pytania.";
     END IF;
@@ -85,9 +87,9 @@ DELIMITER ;
 
 DELIMITER $$
 USE `egzamin_zawodowy`$$
-CREATE PROCEDURE `addAnswer`(IN ques_id INT, IN content MEDIUMTEXT, IN is_correct BOOLEAN)
+CREATE PROCEDURE `addAnswer`(IN in_ques_id INT, IN in_content MEDIUMTEXT, IN in_is_correct BOOLEAN)
 BEGIN
-	INSERT INTO answers (`content`, `is_correct`, `ques_id`) VALUES (content, is_correct, ques_id);
+	INSERT INTO `answers` (`content`, `is_correct`, `ques_id`) VALUES (in_content, in_is_correct, in_ques_id);
 END$$
 
 DELIMITER ;
@@ -98,14 +100,14 @@ DELIMITER ;
 
 DELIMITER $$
 USE `egzamin_zawodowy`$$
-CREATE PROCEDURE `addQuestionReply`(IN ques_id INT, IN answer_content MEDIUMTEXT)
+CREATE PROCEDURE `addQuestionReply`(IN in_ques_id INT, IN in_answer_content MEDIUMTEXT)
 BEGIN
     DECLARE answer_id INT;
-	IF (answer_content != "Nie wiem") THEN 
-		SET answer_id = (SELECT answers.id FROM answers WHERE `content` = answer_content AND `ques_id` = ques_id LIMIT 1);
-		INSERT INTO users_data (`ques_id`, `answ_id`, `view_date_time`) VALUES (ques_id, answer_id, NOW());
-	ELSE
-		INSERT INTO users_data (`ques_id`, `view_date_time`) VALUES (ques_id, NOW());
+	IF (in_answer_content != "Nie wiem") THEN 
+		SET answer_id = (SELECT `answers`.`id` FROM `answers` WHERE `content` = in_answer_content AND `ques_id` = in_ques_id LIMIT 1);
+		INSERT INTO `users_data` (`answ_id`, `view_date_time`) VALUES (answer_id, NOW());
+	-- ELSE
+		-- INSERT INTO `users_data` (`ques_id`, `view_date_time`) VALUES (in_ques_id, NOW());
     END IF;
 END$$
 
@@ -117,9 +119,9 @@ DELIMITER ;
 
 DELIMITER $$
 USE `egzamin_zawodowy`$$
-CREATE PROCEDURE `getAnswersRelatedToQuestion`(IN question_id INT)
+CREATE PROCEDURE `getAnswersRelatedToQuestion`(IN in_ques_id INT)
 BEGIN
-	SELECT `id`, `content`, `is_correct` FROM answers WHERE `ques_id` = question_id;
+	SELECT `id`, `content`, `is_correct` FROM `answers` WHERE `ques_id` = in_ques_id;
 END$$
 
 DELIMITER ;
@@ -132,7 +134,7 @@ DELIMITER $$
 USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getLatestAddedQuestionId`()
 BEGIN
-	SELECT id FROM questions ORDER BY id DESC LIMIT 1;
+	SELECT `id` FROM `questions` ORDER BY `id` DESC LIMIT 1;
 END$$
 
 DELIMITER ;
