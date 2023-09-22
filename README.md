@@ -1,6 +1,10 @@
 # App-Egzamin-Zawodowy
 Profession Exam Learning app made for my preparation to this exam.
 It has learning 3 modes.
+## It is suitable for exams mentioned below
+- INF.03
+- EE.09
+- E14
 # Disclaimer
 There is missing db-config.php file which should contain constants mentioned in connection.php file in connection function.
 There is table_schema.json file with structure of the database.
