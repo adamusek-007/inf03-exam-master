@@ -1,17 +1,7 @@
--- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
 -- -----------------------------------------------------
 -- Schema egzamin_zawodowy
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema egzamin_zawodowy
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4 ;
+CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4;
 USE `egzamin_zawodowy` ;
 
 -- -----------------------------------------------------
@@ -39,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`answers` (
   CONSTRAINT `FK_answ_ques`
     FOREIGN KEY (`ques_id`)
     REFERENCES `egzamin_zawodowy`.`questions` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -60,14 +50,11 @@ CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`users_data` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-USE `egzamin_zawodowy` ;
-
 -- -----------------------------------------------------
 -- procedure addQuestion
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `addQuestion` (IN in_content MEDIUMTEXT, IN in_has_img TINYINT(1), IN in_img_path TINYTEXT)
 BEGIN
 	IF in_has_img = 0 THEN
@@ -86,7 +73,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `addAnswer`(IN in_ques_id INT, IN in_content MEDIUMTEXT, IN in_is_correct BOOLEAN)
 BEGIN
 	INSERT INTO `answers` (`content`, `is_correct`, `ques_id`) VALUES (in_content, in_is_correct, in_ques_id);
@@ -99,7 +85,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `addQuestionReply`(IN in_ques_id INT, IN in_answer_content MEDIUMTEXT)
 BEGIN
     DECLARE answer_id INT;
@@ -118,7 +103,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getAnswersRelatedToQuestion`(IN in_ques_id INT)
 BEGIN
 	SELECT `id`, `content`, `is_correct` FROM `answers` WHERE `ques_id` = in_ques_id;
@@ -131,7 +115,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getLatestAddedQuestionId`()
 BEGIN
 	SELECT `id` FROM `questions` ORDER BY `id` DESC LIMIT 1;
@@ -144,7 +127,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getRandomQuestion` ()
 BEGIN
 SELECT * FROM `questions`order by rand() limit 1;
@@ -157,7 +139,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getAnswerCorrectness` (IN question_id INT, IN answer_content MEDIUMTEXT)
 BEGIN
 	DECLARE answer_id INT;
@@ -177,7 +158,6 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
 CREATE PROCEDURE `getCorrectAnswerForQuestion` (IN question_id INT)
 BEGIN
 	SELECT `content` FROM `answers` WHERE `is_correct` = 1 AND `ques_id` = question_id;
@@ -185,6 +165,46 @@ END$$
 
 DELIMITER ;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- -----------------------------------------------------
+-- View `egzamin_zawodowy`.`v_all`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_all`;
+USE `egzamin_zawodowy`;
+CREATE VIEW `v_all` AS
+  SELECT `users_data`.`id` AS `reply_id`,
+  `users_data`.`view_date_time` AS `reply_date_time`,
+  `users_data`.`answ_id` AS `answer_id`,
+  `answers`.`content` AS `answer_content`,
+  `answers`.`is_correct` AS `answer_correctness`,
+  `questions`.`id` AS `question_id`,
+  `questions`.`content` AS `question_content`
+  FROM `users_data` 
+  JOIN `answers` ON `users_data`.`answ_id` = `answers`.`id`
+  join `questions` on `answers`.`ques_id` = `questions`.`id`;
+
+-- -----------------------------------------------------
+-- View `egzamin_zawodowy`.`v_questions_cards`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_questions_cards`;
+USE `egzamin_zawodowy`;
+CREATE VIEW `v_questions_cards` AS
+SELECT 
+MAX(`reply_date_time`) AS `last_viewed`,
+COUNT(`answer_id`) AS `times_replied`,
+`question_id` AS `ques_id`,
+`question_content` AS `question_content`,
+(SELECT COUNT(`answer_id`)
+  FROM `v_all`
+  WHERE 
+    `question_id` = `ques_id` AND 
+    `answer_correctness` = 1
+) AS `correct_answers`,
+(SELECT COUNT(`answer_id`)
+  FROM `v_all`
+  WHERE
+    `question_id` = `ques_id` AND 
+    `answer_correctness` = 0
+) AS `incorrect_answers`
+FROM
+`v_all`
+GROUP BY `question_id`;
