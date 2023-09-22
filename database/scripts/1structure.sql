@@ -9,7 +9,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema egzamin_zawodowy
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4;
 USE `egzamin_zawodowy` ;
 
 -- -----------------------------------------------------
@@ -47,17 +47,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`users_data` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `ques_id` INT NOT NULL,
   `answ_id` INT NULL,
   `view_date_time` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_udat_ques_idx` (`ques_id` ASC) VISIBLE,
   INDEX `FK_udat_answ_idx` (`answ_id` ASC) VISIBLE,
-  CONSTRAINT `FK_udat_ques`
-    FOREIGN KEY (`ques_id`)
-    REFERENCES `egzamin_zawodowy`.`questions` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `FK_udat_answ`
     FOREIGN KEY (`answ_id`)
     REFERENCES `egzamin_zawodowy`.`answers` (`id`)
