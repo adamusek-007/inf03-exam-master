@@ -3,7 +3,7 @@ services:
     container_name: main
     build: .
     volumes:
-      - ./:/var/www/html
+      - ./app:/var/www/html
     ports:
       - 80:80
   app-mysql:
