@@ -1,9 +1,26 @@
-# App-Egzamin-Zawodowy
-Profession Exam Learning app made for my preparation to this exam.
-It has learning 3 modes.
+  # App-Egzamin-Zawodowy
+INF.03 Profession exam learning app that I've made for my preparations to this exam.
+
+You can run app by yourself by cloning this repository and then in it running 
+```
+docker-compose build
+docker-compose up
+```
+And it should run at 127.0.0.1 or localhost.
+## Tech used:
+-  JavaScript
+    -  jQuery
+    -  Ajax
+-  HTML5
+-  CSS3
+-  PHP
+-  MySQL
+-  Docker
+-  Java (not in this repo and not in any other)
+-  Selenium (not in this repo and not in any other)
 # Disclaimer
-There is missing db-config.php file which should contain constants mentioned in connection.php file in connection function.
-There is table_schema.json file with structure of the database.
+App functionality is in build.
+Mode selection doesn't work for now.
 # Preview
 ![image](https://github.com/adamusek-007/App-Egzamin-Zawodowy/assets/122128430/ae512dbb-cc53-4485-8000-d88624c00fe3)
 ## Question insert view:
