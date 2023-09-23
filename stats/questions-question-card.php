@@ -1,5 +1,5 @@
 <div class="questions-question-card">
-    <div class="questions-question-content"><a href="../stats/?question-id=<?=$ques_id?>"><?=$question_content?></a></div>
+    <div class="questions-question-content"><?=$question_content?></a></div>
     <div class="questions-question-id">ID pytania: <?=$ques_id?></div>
     <div class="questions-question-last-viewed">Ostatnio wyświetlono: <?=$last_viewed?></div>
     <section class="questions-question-replies">

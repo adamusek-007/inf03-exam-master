@@ -27,7 +27,6 @@ include("answer-questions.php");
     </form>
     <details>
         <p>Id pytania: <?=$ques_id?></p>
-        <p><a href="../stats?question-id=<?=$ques_id?>">Statystyki pytania</a></p>
     </details>
     <script src="check-answer-and-submit.js"></script>
 </body>
