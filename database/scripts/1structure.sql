@@ -1,3 +1,11 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema egzamin_zawodowy
+-- -----------------------------------------------------
+
 -- -----------------------------------------------------
 -- Schema egzamin_zawodowy
 -- -----------------------------------------------------
@@ -166,6 +174,39 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- procedure getQuestionCardsView
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `egzamin_zawodowy`$$
+CREATE PROCEDURE `getQuestionCardsView` ()
+BEGIN
+  -- This view needs to be in the procedure because of MySQL formats views and makes in where statment TRUE
+  SELECT 
+  MAX(`reply_date_time`) AS `last_viewed`,
+  COUNT(`answer_id`) AS `times_replied`,
+  `question_id` AS `ques_id`,
+  `question_content` AS `question_content`,
+  (SELECT COUNT(`answer_id`)
+    FROM `v_all`
+    WHERE 
+      `question_id` = `ques_id` AND 
+      `answer_correctness` = 1
+  ) AS `correct_answers`,
+  (SELECT COUNT(`answer_id`)
+    FROM `v_all`
+    WHERE
+      `question_id` = `ques_id` AND 
+      `answer_correctness` = 0
+  ) AS `incorrect_answers`
+  FROM
+  `v_all`
+  GROUP BY `question_id`;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- View `egzamin_zawodowy`.`v_all`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_all`;
@@ -182,29 +223,6 @@ CREATE VIEW `v_all` AS
   JOIN `answers` ON `users_data`.`answ_id` = `answers`.`id`
   join `questions` on `answers`.`ques_id` = `questions`.`id`;
 
--- -----------------------------------------------------
--- View `egzamin_zawodowy`.`v_questions_cards`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_questions_cards`;
-USE `egzamin_zawodowy`;
-CREATE VIEW `v_questions_cards` AS
-SELECT 
-MAX(`reply_date_time`) AS `last_viewed`,
-COUNT(`answer_id`) AS `times_replied`,
-`question_id` AS `ques_id`,
-`question_content` AS `question_content`,
-(SELECT COUNT(`answer_id`)
-  FROM `v_all`
-  WHERE 
-    `question_id` = `ques_id` AND 
-    `answer_correctness` = 1
-) AS `correct_answers`,
-(SELECT COUNT(`answer_id`)
-  FROM `v_all`
-  WHERE
-    `question_id` = `ques_id` AND 
-    `answer_correctness` = 0
-) AS `incorrect_answers`
-FROM
-`v_all`
-GROUP BY `question_id`;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
