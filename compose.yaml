@@ -1,7 +1,7 @@
 services:
   main:
     container_name: main
-    build: .
+    build: ./app
     volumes:
       - ./app:/var/www/html
     ports:
