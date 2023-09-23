@@ -7,8 +7,8 @@ services:
     ports:
       - 80:80
   app-mysql:
-    build: ./database/
     container_name: app-mysql
+    build: ./database/
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: egzamin_zawodowy
