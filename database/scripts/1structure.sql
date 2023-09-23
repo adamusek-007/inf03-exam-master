@@ -174,12 +174,11 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getQuestionCardsView
+-- procedure getQuestionsCardsView
 -- -----------------------------------------------------
 
 DELIMITER $$
-USE `egzamin_zawodowy`$$
-CREATE PROCEDURE `getQuestionCardsView` ()
+CREATE PROCEDURE `getQuestionsCardsView` ()
 BEGIN
   -- This view needs to be in the procedure because of MySQL formats views and makes in where statment TRUE
   SELECT 
