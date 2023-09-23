@@ -7,14 +7,14 @@ body {
     background-color: #212529;
 }
 
-.question-card + .question-card {
+.questions-question-card + .questions-question-card {
     margin-top: 10px;
 }
-.question-card {
+.questions-question-card {
     padding: 10px;
     background-color: #17181a;
 }
-.question-content {
+.questions-question-content {
     margin-bottom: 5px;
     font-size: 18px;
 }
