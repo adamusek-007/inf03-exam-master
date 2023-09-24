@@ -13,7 +13,7 @@ CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4;
 USE `egzamin_zawodowy` ;
 
 -- -----------------------------------------------------
--- Table `egzamin_zawodowy`.`questions`
+-- Table `egzamin_zawodowy`.`questions` (alias ques)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -25,7 +25,7 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `egzamin_zawodowy`.`answers`
+-- Table `egzamin_zawodowy`.`answers` (alias anrs)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`answers` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -43,15 +43,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `egzamin_zawodowy`.`users_data`
+-- Table `egzamin_zawodowy`.`users_data` (alias udat)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`users_data` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `answ_id` INT NULL,
   `view_date_time` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_udat_answ_idx` (`answ_id` ASC) VISIBLE,
-  CONSTRAINT `FK_udat_answ`
+  INDEX `FK_udat_anrs_idx` (`answ_id` ASC) VISIBLE,
+  CONSTRAINT `FK_udat_anrs`
     FOREIGN KEY (`answ_id`)
     REFERENCES `egzamin_zawodowy`.`answers` (`id`)
     ON DELETE NO ACTION
@@ -107,11 +107,11 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getAnswersRelatedToQuestion
+-- procedure getQuestionAnswers
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getAnswersRelatedToQuestion`(IN in_ques_id INT)
+CREATE PROCEDURE `getQuestionAnswers`(IN in_ques_id INT)
 BEGIN
 	SELECT `id`, `content`, `is_correct` FROM `answers` WHERE `ques_id` = in_ques_id;
 END$$
@@ -137,7 +137,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE `getRandomQuestion` ()
 BEGIN
-SELECT * FROM `questions`order by rand() limit 1;
+  SELECT * FROM `questions`order by rand() limit 1;
 END$$
 
 DELIMITER ;
@@ -162,11 +162,11 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getCorrectAnswerForQuestion
+-- procedure getQuestionCorrectAnswer
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getCorrectAnswerForQuestion` (IN question_id INT)
+CREATE PROCEDURE `getQuestionCorrectAnswer` (IN question_id INT)
 BEGIN
 	SELECT `content` FROM `answers` WHERE `is_correct` = 1 AND `ques_id` = question_id;
 END$$
@@ -187,30 +187,30 @@ BEGIN
   `question_id` AS `ques_id`,
   `question_content` AS `question_content`,
   (SELECT COUNT(`answer_id`)
-    FROM `v_all`
+    FROM `v_everything`
     WHERE 
       `question_id` = `ques_id` AND 
       `answer_correctness` = 1
   ) AS `correct_answers`,
   (SELECT COUNT(`answer_id`)
-    FROM `v_all`
+    FROM `v_everything`
     WHERE
       `question_id` = `ques_id` AND 
       `answer_correctness` = 0
   ) AS `incorrect_answers`
   FROM
-  `v_all`
+  `v_everything`
   GROUP BY `question_id`;
 END$$
 
 DELIMITER ;
 
 -- -----------------------------------------------------
--- View `egzamin_zawodowy`.`v_all`
+-- View `egzamin_zawodowy`.`v_everything`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_all`;
+DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_everything`;
 USE `egzamin_zawodowy`;
-CREATE VIEW `v_all` AS
+CREATE VIEW `v_everything` AS
   SELECT `users_data`.`id` AS `reply_id`,
   `users_data`.`view_date_time` AS `reply_date_time`,
   `users_data`.`answ_id` AS `answer_id`,

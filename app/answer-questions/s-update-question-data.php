@@ -17,7 +17,7 @@ $is_correct = $row['is_correct'];
 unset($stmt);
 echo $is_correct;
 if (!$is_correct) {
-    $query = "CALL getCorrectAnswerForQuestion({$ques_id});";
+    $query = "CALL getQuestionCorrectAnswer({$ques_id});";
     $stmt2 = $connection->query($query);
     $row = $stmt2->fetch(PDO::FETCH_ASSOC);
     $correct_answer = $row['content'];
