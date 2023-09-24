@@ -177,36 +177,47 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getQuestionsCardsView` ()
+CREATE PROCEDURE `getQuestionsCardsView` (IN question_id INT)
 BEGIN
-  -- This view needs to be in the procedure because of MySQL formats views and makes in where statment TRUE
-  SELECT 
-  MAX(`reply_date_time`) AS `last_seen`,
-  COUNT(`answer_id`) AS `reply_count`,
-  `question_id` AS `ques_id`,
-  `question_content` AS `question_content`,
-  (SELECT COUNT(`answer_id`)
-    FROM `v_everything`
-    WHERE 
-      `question_id` = `ques_id` AND 
-      `answer_correctness` = 1
-  ) AS `correct_replies`,
-  (SELECT COUNT(`answer_id`)
-    FROM `v_everything`
-    WHERE
-      `question_id` = `ques_id` AND 
-      `answer_correctness` = 0
-  ) AS `incorrect_replies`
-  FROM
-  `v_everything`
-  GROUP BY `question_id`;
+  SELECT * FROM `v_questions_cards`;
 END$$
 
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- View `egzamin_zawodowy`.`v_questions_cards`
+-- -----------------------------------------------------
+
+CREATE VIEW `v_questions_cards` AS
+  SELECT 
+    MAX(`v_everything`.`reply_date_time`) AS `last_seen`,
+    COUNT(`v_everything`.`answer_id`) AS `reply_count`,
+    `v_everything`.`question_id` AS `question_id`,
+    `v_everything`.`question_content` AS `question_content`,
+    (SELECT 
+      COUNT(`users_data`.`id`)
+        FROM
+            (`users_data`
+            JOIN `answers` ON ((`users_data`.`answ_id` = `answers`.`id`)))
+        WHERE
+            ((`answers`.`ques_id` = `v_everything`.`question_id`)
+                AND (`answers`.`is_correct` = 1))) AS `correct_replies`,
+    (SELECT 
+            COUNT(`users_data`.`id`)
+        FROM
+            (`users_data`
+            JOIN `answers` ON ((`users_data`.`answ_id` = `answers`.`id`)))
+        WHERE
+            ((`answers`.`ques_id` = `v_everything`.`question_id`)
+                AND (`answers`.`is_correct` = 0))) AS `incorrect_replies`
+    FROM
+        `v_everything`
+    GROUP BY `v_everything`.`question_id`;
+
+-- -----------------------------------------------------
 -- View `egzamin_zawodowy`.`v_everything`
 -- -----------------------------------------------------
+
 DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_everything`;
 USE `egzamin_zawodowy`;
 CREATE VIEW `v_everything` AS
