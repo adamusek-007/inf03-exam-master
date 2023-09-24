@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content` MEDIUMTEXT NOT NULL,
   `image_path` TINYTEXT NULL DEFAULT NULL,
-  `next_repetition_time` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
