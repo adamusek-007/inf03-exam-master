@@ -181,8 +181,8 @@ CREATE PROCEDURE `getQuestionsCardsView` ()
 BEGIN
   -- This view needs to be in the procedure because of MySQL formats views and makes in where statment TRUE
   SELECT 
-  MAX(`reply_date_time`) AS `last_viewed`,
-  COUNT(`answer_id`) AS `times_replied`,
+  MAX(`reply_date_time`) AS `last_seen`,
+  COUNT(`answer_id`) AS `reply_count`,
   `question_id` AS `ques_id`,
   `question_content` AS `question_content`,
   (SELECT COUNT(`answer_id`)
@@ -190,13 +190,13 @@ BEGIN
     WHERE 
       `question_id` = `ques_id` AND 
       `answer_correctness` = 1
-  ) AS `correct_answers`,
+  ) AS `correct_replies`,
   (SELECT COUNT(`answer_id`)
     FROM `v_everything`
     WHERE
       `question_id` = `ques_id` AND 
       `answer_correctness` = 0
-  ) AS `incorrect_answers`
+  ) AS `incorrect_replies`
   FROM
   `v_everything`
   GROUP BY `question_id`;
