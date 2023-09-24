@@ -177,7 +177,7 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getQuestionsCardsView` (IN question_id INT)
+CREATE PROCEDURE `getQuestionsCardsView`()
 BEGIN
   SELECT * FROM `v_questions_cards`;
 END$$
