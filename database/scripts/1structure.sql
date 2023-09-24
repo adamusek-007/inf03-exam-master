@@ -185,6 +185,24 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
+-- View `egzamin_zawodowy`.`v_everything`
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_everything`;
+USE `egzamin_zawodowy`;
+CREATE VIEW `v_everything` AS
+  SELECT `users_data`.`id` AS `reply_id`,
+  `users_data`.`view_date_time` AS `reply_date_time`,
+  `users_data`.`answ_id` AS `answer_id`,
+  `answers`.`content` AS `answer_content`,
+  `answers`.`is_correct` AS `answer_correctness`,
+  `questions`.`id` AS `question_id`,
+  `questions`.`content` AS `question_content`
+  FROM `users_data` 
+  JOIN `answers` ON `users_data`.`answ_id` = `answers`.`id`
+  join `questions` on `answers`.`ques_id` = `questions`.`id`;
+
+-- -----------------------------------------------------
 -- View `egzamin_zawodowy`.`v_questions_cards`
 -- -----------------------------------------------------
 
@@ -213,24 +231,6 @@ CREATE VIEW `v_questions_cards` AS
     FROM
         `v_everything`
     GROUP BY `v_everything`.`question_id`;
-
--- -----------------------------------------------------
--- View `egzamin_zawodowy`.`v_everything`
--- -----------------------------------------------------
-
-DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_everything`;
-USE `egzamin_zawodowy`;
-CREATE VIEW `v_everything` AS
-  SELECT `users_data`.`id` AS `reply_id`,
-  `users_data`.`view_date_time` AS `reply_date_time`,
-  `users_data`.`answ_id` AS `answer_id`,
-  `answers`.`content` AS `answer_content`,
-  `answers`.`is_correct` AS `answer_correctness`,
-  `questions`.`id` AS `question_id`,
-  `questions`.`content` AS `question_content`
-  FROM `users_data` 
-  JOIN `answers` ON `users_data`.`answ_id` = `answers`.`id`
-  join `questions` on `answers`.`ques_id` = `questions`.`id`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
