@@ -2,11 +2,16 @@
 INF.03 Profession exam learning app that I've made for my preparations to this exam.
 
 You can run app by yourself by cloning this repository and then in it running 
+
+## Installation
+
 ```
+git clone https://github.com/adamusek-007/App-Egzamin-Zawodowy.git
+cd /App-Egzamin-Zawodowy/
 docker-compose build
 docker-compose up
 ```
-And it should run at 127.0.0.1 or localhost.
+And after image building and runnig it should be able at 127.0.0.1 or localhost.
 
 ## It is suitable for exams mentioned below
 - INF.03
