@@ -1,39 +1,35 @@
 <div class="top-section">
     <p><?=$question_content?></p>
     <?php if(!is_null($question_image)) {
-        echo "<img src=\"../resources/images/{$question_image}\">";
+        $img_tag = "<img src=\"../resources/images/{$question_image}\">";
+        echo $img_tag;
     } ?>
-    <section>
-        <?php foreach($question_answers as $question_answer):?>
-            <p class="answer">$question_answer</p>
+    <section class="answers-section">
+        <?php foreach($question_answers as $answer):?>
+            <div class="answer-block">
+                <div class="answer-id"><?=$answer->id?></div>
+                <div class="answer-content"><?=$answer->content?></div>
+                <div class="answer-correctness"><?=$answer->is_correct?></div>
+            </div>
         <?php endforeach?>
     </section>
 </div>
 <div class="mid-section">
-    <svg>
-    <polyline
-     fill="none"
-     stroke="#0074d9"
-     stroke-width="3"
-     points="
-       0,120
-       20,60
-       40,80
-       60,20"/>
-    </svg>
 </div>
 <div class="bottom-section">
     <table>
         <thead>
             <th>Lp.</th>
+            <th>Poprawność</th>
             <th>Numer odpowiedzi</th>
             <th>Data i czas odpowiedzi</th>
         </thead>
         <tbody>
             <?php foreach($replies as $reply):?>
-                $reply->reply_date_time;
-                $reply->answer_correcness;
-                $reply->answer_id;
+                <td><?=$reply->number?></td>
+                <td><?=$reply->answer_correcness;?></td>
+                <td><?=$reply->answer_id;?></td>
+                <td><?=$reply->reply_date_time;?></td>
             <?php endforeach ?>
         </tbody>
     </table>

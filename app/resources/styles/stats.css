@@ -18,3 +18,14 @@ body {
     margin-bottom: 5px;
     font-size: 18px;
 }
+.top-section {
+    background-color: #17181a;
+}
+.answer-block {
+    display: flex;
+    flex-direction: row;
+}
+.answers-section {
+    display: flex;
+    flex-direction: column;
+}

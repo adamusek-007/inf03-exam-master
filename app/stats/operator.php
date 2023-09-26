@@ -2,7 +2,8 @@
 
 class ViewGenereator
 {
-    private function get_view_generation_type() {
+    private function get_view_generation_type()
+    {
         if ($this->is_get_request()) {
             $get_size = $this->check_get_request_size();
             if ($get_size == 1) {
@@ -40,34 +41,152 @@ class ViewGenereator
     function __construct($connection)
     {
         $generating_type = $this->get_view_generation_type();
-        if ($generating_type == "questions"){
+        if ($generating_type == "questions") {
             new QuestionsCardsView($connection);
         } else {
             new QuestionCardView($connection);
         }
     }
 }
-class QuestionCardView
+class CardTopSection
 {
-    private function get_question_card_view($connection, $question_id)
-    {
-        $sqls = [
-            "CALL getQuestionAnswers({$question_id})",
-            "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM v_everything WHERE {$question_id};"
-        ];
-        foreach ($sqls as $sql) {
+    private $question_content;
 
+    private $question_image;
+
+    private $question_answers;
+
+    public function get_question_answers()
+    {
+        return $this->question_answers;
+    }
+    public function get_question_content()
+    {
+        return $this->question_content;
+    }
+    public function get_question_image()
+    {
+        return $this->question_image;
+    }
+
+    function set_question_content_and_image($question_id, $connection)
+    {
+        $sql = "SELECT `questions`.`content` as `question_content`, `questions`.`image_path` as `question_image` FROM `questions` WHERE `id` = {$question_id};";
+        $row = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
+        $this->question_content = $row['question_content'];
+        $this->question_image = $row['question_image'];
+    }
+
+    function set_question_answers($question_id, $connection)
+    {
+        $sql = "CALL getQuestionAnswers({$question_id});";
+        $result = $connection->query($sql);
+        $this->question_answers = [];
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            array_push($this->question_answers, new Answer($row['id'], $row['content'], $row['is_correct']));
         }
     }
-    function __construct($connection) {
 
+    function __construct($connection)
+    {
+        $question_id = $_GET["question-id"];
+        $this->set_question_content_and_image($question_id, $connection);
+        $this->set_question_answers($question_id, $connection);
+    }
+}
+class Answer
+{
+    public $id;
+    public $content;
+    public $is_correct;
+    function __construct($id, $content, $is_correct)
+    {
+        $this->id = $id;
+        $this->content = $content;
+        $this->is_correct = $is_correct;
+    }
+}
+class CardMidSection
+{
+    function generate_svg_chart()
+    {
+
+    }
+    function __construct($connection)
+    {
+        $question_id = $_GET["question-id"];
+        $sql = "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM v_everything WHERE {$question_id};";
+        $this->generate_svg_chart();
+    }
+}
+class CardBottomSection
+{
+    private $replies;
+
+    public function get_replies()
+    {
+        return $this->replies;
+    }
+
+    function __construct($connection)
+    {
+        $question_id = $_GET["question-id"];
+        $sql = "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM `v_everything` WHERE `question_id` = {$question_id};";
+        $result = $connection->query($sql);
+        $this->replies = [];
+        $i = 1;
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            array_push($this->replies, new Reply($row['answer_id'], $row['answer_correctness'], $row['reply_date_time'], $i++));
+        }
+
+    }
+}
+class Reply
+{
+
+    public $number;
+    public $answer_id;
+    public $answer_correcness;
+    public $reply_date_time;
+
+    function __construct($answer_id, $answer_correctnes, $reply_date_time, $number)
+    {
+        $this->answer_id = $answer_id;
+        $this->answer_correcness = $answer_correctnes;
+        $this->reply_date_time = $reply_date_time;
+        $this->number = $number;
+    }
+}
+class QuestionCardView
+{
+    private $question_id;
+
+    private function genreate_view($connection)
+    {
+        $top = new CardTopSection($connection);
+        $mid = new CardMidSection($connection);
+        $bottom = new CardBottomSection($connection);
+
+        $question_content = $top->get_question_content();
+        $question_image = $top->get_question_image();
+        $question_answers = $top->get_question_answers();
+
+        $replies = $bottom->get_replies();
+
+        include("./question-card.php");
+    }
+    function __construct($connection)
+    {
+        $this->question_id = $_GET["question-id"];
+        $this->genreate_view($connection);
     }
 }
 class QuestionsCardsView
 {
     private $sql = "CALL getQuestionsCardsView();";
 
-    function __construct($connection){
+    function __construct($connection)
+    {
         $result = $connection->query($this->sql);
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
