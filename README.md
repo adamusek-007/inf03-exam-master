@@ -22,14 +22,14 @@ And after image building and runnig it should be able at 127.0.0.1 or localhost.
 - EE.09
 - E14
 
-## Tech stack:
-### Server:
+## Tech stack
+### Server
 - Apache2
 
-### Datababase:
+### Datababase
 - MySQL
 
-### Languages:
+### Languages
 -  JavaScript
     -  jQuery
     -  Ajax
@@ -38,7 +38,7 @@ And after image building and runnig it should be able at 127.0.0.1 or localhost.
 -  PHP
 -  Java (not in this repo and not in any other)
 
-### Tools:
+### Tools
 - VSCode
 - Eclipse (for Java)
 - Docker
