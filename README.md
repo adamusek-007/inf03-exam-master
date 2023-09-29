@@ -11,7 +11,7 @@ You can use this project to practice to INF.03 exam.
 You can run app by yourself by cloning this repository and then running it.
 
 ## Installation and running
-
+You need to have docker installed and runinng
 ```
 git clone https://github.com/adamusek-007/App-Egzamin-Zawodowy.git
 cd /App-Egzamin-Zawodowy/
