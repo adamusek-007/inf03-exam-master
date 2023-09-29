@@ -10,7 +10,7 @@ You can run app by yourself by cloning this repository and then running it.
 ## Installation and running
 You need to have [docker](https://www.docker.com/) installed and runinng
 ```
-git clone https://github.com/adamusek-007/App-Egzamin-Zawodowy.git
+git clone https://github.com/adamusek-007/inf03-exam-master.git
 cd /App-Egzamin-Zawodowy/
 docker-compose build
 docker-compose up
