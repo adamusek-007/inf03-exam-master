@@ -1,9 +1,15 @@
 # App-Egzamin-Zawodowy
-INF.03 Profession exam learning app that I've made for my preparations to this exam.
 
-You can run app by yourself by cloning this repository and then in it running 
+## About
 
-## Installation
+[INF.03](https://informatyk.edu.pl/kwalifikacja-inf-03/) profession exam learning app that I've made for my preparations to this exam.
+
+## Usage
+
+You can use this project to practice to INF.03 exam.
+You can run app by yourself by cloning this repository and then running it.
+
+## Installation and running
 
 ```
 git clone https://github.com/adamusek-007/App-Egzamin-Zawodowy.git
