@@ -7,6 +7,7 @@
 ## Usage
 
 You can use this project to practice to INF.03 exam.
+
 You can run app by yourself by cloning this repository and then running it.
 
 ## Installation and running
@@ -19,27 +20,41 @@ docker-compose up
 ```
 And after image building and runnig it should be able at 127.0.0.1 or localhost.
 
-## It is suitable for exams mentioned below
+## Suitable exams
+
 - INF.03
 - EE.09
 - E14
 
 ## Tech used:
+
+### Server:
+- Apache2
+### Datababase:
+- MySQL
+### Languages:
 -  JavaScript
     -  jQuery
     -  Ajax
 -  HTML5
 -  CSS3
 -  PHP
--  MySQL
--  Docker
 -  Java (not in this repo and not in any other)
--  Selenium (not in this repo and not in any other)
+### Tools:
+- VSCode
+- Eclipse (for Java)
+- Docker
+- Selenium (not in this repo and not in any other)
+
+### Version control
+- Git
 
 # Disclaimer
+
 App functionality is in build.
 Mode selection doesn't work for now.
 # Preview
+
 ![image](https://github.com/adamusek-007/App-Egzamin-Zawodowy/assets/122128430/ae512dbb-cc53-4485-8000-d88624c00fe3)
 ## Question insert view:
 ![image](https://github.com/adamusek-007/App-Egzamin-Zawodowy/assets/122128430/e303be0b-0ec7-4dec-ac74-7199e87adf92)
