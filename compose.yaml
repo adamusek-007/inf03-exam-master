@@ -10,7 +10,7 @@ services:
     expose:
      - 9003
     depends_on:
-      app-mysql:
+      database:
         condition: service_healthy
   database:
     build: ./database
