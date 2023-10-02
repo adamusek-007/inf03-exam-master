@@ -1,6 +1,5 @@
 services:
-  main:
-    container_name: main
+  app:
     build: ./app
     volumes:
       - ./app:/var/www/html
@@ -13,9 +12,8 @@ services:
     depends_on:
       app-mysql:
         condition: service_healthy
-  app-mysql:
-    container_name: app-mysql
-    build: ./database/
+  database:
+    build: ./database
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: egzamin_zawodowy
