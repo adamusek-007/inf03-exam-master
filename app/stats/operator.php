@@ -183,16 +183,36 @@ class QuestionCardView
 }
 class QuestionsCardsView
 {
+    private $summary_sql = "CALL getSummaryStats();";
     private $sql = "CALL getQuestionsCardsView();";
+
+    function get_each_question_stats($connection) {
+        $result = $connection->query($this->sql);
+        echo "<main>";
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $correct_procentage = $correct_replies/($correct_replies + $incorrect_replies)*100;
+            $incorrect_procentage = $incorrect_replies/($correct_replies + $incorrect_replies)*100;
+            include("questions-question-card.php");
+        }
+        echo "</main>";
+    }
+
+    function get_summary_stats($connection) {
+        $result = $connection->query($this->summary_sql);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        $total_correct_procentage = $total_correct_replies/($total_replies)*100;
+        $total_incorrect_procentage = $total_incorrect_replies/($total_replies)*100;
+        include("summary-stats-card.php");
+    }
 
     function __construct($connection)
     {
-        $result = $connection->query($this->sql);
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
-            include("questions-question-card.php");
-        }
+        $this->get_summary_stats($connection);
+        $this->get_each_question_stats($connection);
     }
+    
 }
 $connection = get_database_connection();
 $view_generator = new ViewGenereator($connection);
