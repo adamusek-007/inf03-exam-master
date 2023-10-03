@@ -1,5 +1,5 @@
 <div class="top-section">
-    <p><?=$question_content?></p>
+    <p id="question-content"><?=$question_content?></p>
     <?php if(!is_null($question_image)) {
         $img_tag = "<img src=\"../resources/images/{$question_image}\">";
         echo $img_tag;
@@ -15,6 +15,7 @@
     </section>
 </div>
 <div class="mid-section">
+    <!-- TODO Line chart -->
 </div>
 <div class="bottom-section">
     <table>
@@ -33,4 +34,9 @@
             <?php endforeach ?>
         </tbody>
     </table>
+    <style>
+        #question-content {
+            font-size: 2em;
+        }
+    </style>
 </div>
