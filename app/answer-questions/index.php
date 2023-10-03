@@ -14,7 +14,7 @@ include("answer-questions.php");
 </head>
 
 <body>
-    <form id="form" action="index.php" method="post" class="first-site-form">
+    <form id="form" action="./" method="post" class="first-site-form">
         <label for="user-answer">
             <?=htmlspecialchars($ques_content)?>
         </label>

@@ -11,7 +11,7 @@ setcookie("ques_id", "", time() -1);
 setcookie("ques_id", $ques_id);
 $image_path = $row['image_path'];
 $result->closeCursor();
-$q_answers = "CALL getAnswersRelatedToQuestion({$ques_id});";
+$q_answers = "CALL getQuestionAnswers({$ques_id});";
 $result = $connection->query($q_answers);
 
 $answers_array = get_answers_array($result);

@@ -13,19 +13,18 @@ CREATE SCHEMA IF NOT EXISTS `egzamin_zawodowy` DEFAULT CHARACTER SET utf8mb4;
 USE `egzamin_zawodowy` ;
 
 -- -----------------------------------------------------
--- Table `egzamin_zawodowy`.`questions`
+-- Table `egzamin_zawodowy`.`questions` (alias ques)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content` MEDIUMTEXT NOT NULL,
   `image_path` TINYTEXT NULL DEFAULT NULL,
-  `next_repetition_time` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `egzamin_zawodowy`.`answers`
+-- Table `egzamin_zawodowy`.`answers` (alias anrs)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`answers` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -43,15 +42,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `egzamin_zawodowy`.`users_data`
+-- Table `egzamin_zawodowy`.`users_data` (alias udat)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `egzamin_zawodowy`.`users_data` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `answ_id` INT NULL,
   `view_date_time` DATETIME NULL,
   PRIMARY KEY (`id`),
-  INDEX `FK_udat_answ_idx` (`answ_id` ASC) VISIBLE,
-  CONSTRAINT `FK_udat_answ`
+  INDEX `FK_udat_anrs_idx` (`answ_id` ASC) VISIBLE,
+  CONSTRAINT `FK_udat_anrs`
     FOREIGN KEY (`answ_id`)
     REFERENCES `egzamin_zawodowy`.`answers` (`id`)
     ON DELETE NO ACTION
@@ -107,11 +106,11 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getAnswersRelatedToQuestion
+-- procedure getQuestionAnswers
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getAnswersRelatedToQuestion`(IN in_ques_id INT)
+CREATE PROCEDURE `getQuestionAnswers`(IN in_ques_id INT)
 BEGIN
 	SELECT `id`, `content`, `is_correct` FROM `answers` WHERE `ques_id` = in_ques_id;
 END$$
@@ -137,7 +136,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE `getRandomQuestion` ()
 BEGIN
-SELECT * FROM `questions`order by rand() limit 1;
+  SELECT * FROM `questions`order by rand() limit 1;
 END$$
 
 DELIMITER ;
@@ -162,11 +161,11 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure getCorrectAnswerForQuestion
+-- procedure getQuestionCorrectAnswer
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getCorrectAnswerForQuestion` (IN question_id INT)
+CREATE PROCEDURE `getQuestionCorrectAnswer` (IN question_id INT)
 BEGIN
 	SELECT `content` FROM `answers` WHERE `is_correct` = 1 AND `ques_id` = question_id;
 END$$
@@ -178,39 +177,20 @@ DELIMITER ;
 -- -----------------------------------------------------
 
 DELIMITER $$
-CREATE PROCEDURE `getQuestionsCardsView` ()
+CREATE PROCEDURE `getQuestionsCardsView`()
 BEGIN
-  -- This view needs to be in the procedure because of MySQL formats views and makes in where statment TRUE
-  SELECT 
-  MAX(`reply_date_time`) AS `last_viewed`,
-  COUNT(`answer_id`) AS `times_replied`,
-  `question_id` AS `ques_id`,
-  `question_content` AS `question_content`,
-  (SELECT COUNT(`answer_id`)
-    FROM `v_all`
-    WHERE 
-      `question_id` = `ques_id` AND 
-      `answer_correctness` = 1
-  ) AS `correct_answers`,
-  (SELECT COUNT(`answer_id`)
-    FROM `v_all`
-    WHERE
-      `question_id` = `ques_id` AND 
-      `answer_correctness` = 0
-  ) AS `incorrect_answers`
-  FROM
-  `v_all`
-  GROUP BY `question_id`;
+  SELECT * FROM `v_questions_cards`;
 END$$
 
 DELIMITER ;
 
 -- -----------------------------------------------------
--- View `egzamin_zawodowy`.`v_all`
+-- View `egzamin_zawodowy`.`v_everything`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_all`;
+
+DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_everything`;
 USE `egzamin_zawodowy`;
-CREATE VIEW `v_all` AS
+CREATE VIEW `v_everything` AS
   SELECT `users_data`.`id` AS `reply_id`,
   `users_data`.`view_date_time` AS `reply_date_time`,
   `users_data`.`answ_id` AS `answer_id`,
@@ -221,6 +201,36 @@ CREATE VIEW `v_all` AS
   FROM `users_data` 
   JOIN `answers` ON `users_data`.`answ_id` = `answers`.`id`
   join `questions` on `answers`.`ques_id` = `questions`.`id`;
+
+-- -----------------------------------------------------
+-- View `egzamin_zawodowy`.`v_questions_cards`
+-- -----------------------------------------------------
+
+CREATE VIEW `v_questions_cards` AS
+  SELECT 
+    MAX(`v_everything`.`reply_date_time`) AS `last_seen`,
+    COUNT(`v_everything`.`answer_id`) AS `reply_count`,
+    `v_everything`.`question_id` AS `question_id`,
+    `v_everything`.`question_content` AS `question_content`,
+    (SELECT 
+      COUNT(`users_data`.`id`)
+        FROM
+            (`users_data`
+            JOIN `answers` ON ((`users_data`.`answ_id` = `answers`.`id`)))
+        WHERE
+            ((`answers`.`ques_id` = `v_everything`.`question_id`)
+                AND (`answers`.`is_correct` = 1))) AS `correct_replies`,
+    (SELECT 
+            COUNT(`users_data`.`id`)
+        FROM
+            (`users_data`
+            JOIN `answers` ON ((`users_data`.`answ_id` = `answers`.`id`)))
+        WHERE
+            ((`answers`.`ques_id` = `v_everything`.`question_id`)
+                AND (`answers`.`is_correct` = 0))) AS `incorrect_replies`
+    FROM
+        `v_everything`
+    GROUP BY `v_everything`.`question_id`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
