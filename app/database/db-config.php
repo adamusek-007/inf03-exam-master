@@ -1,5 +1,5 @@
 <?php
-define('DB_HOST', 'app-mysql');
+define('DB_HOST', 'database');
 define('DB_NAME', 'egzamin_zawodowy');
 define('DB_USER', 'root');
 define('DB_PASSWORD', 'root');
