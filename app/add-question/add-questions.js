@@ -1,12 +1,8 @@
 $(document).ready(function () {
   $("#form").on("submit", function (event) {
     event.preventDefault();
-
-    var allFieldsFilled = validateIncomingData();
-
-    if (allFieldsFilled) {
-      var formData = new FormData(this);
-      makeAjaxRequest(formData);
+    if (validateIncomingData()) {
+      makeAjaxRequest(new FormData(this));
     } else {
       alert("Please fill out all required fields before submitting.");
     }
@@ -20,8 +16,8 @@ function makeAjaxRequest(formData) {
     data: formData,
     processData: false,
     contentType: false,
-    success: handleAjaxResponse(response),
-    error: handleAjaxError(error)
+    success: (response)=> { handleAjaxResponse(response)},
+    error: (error)=>{handleAjaxError(error)}
   });
 }
 
