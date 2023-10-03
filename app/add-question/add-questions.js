@@ -20,24 +20,28 @@ function makeAjaxRequest(formData) {
     data: formData,
     processData: false,
     contentType: false,
-    success: function (response) {
-      if (response == 0)  {
-        $("#form")[0].reset();
-      } else {
-        alert(response);
-        console.log(response);
-      }
-    },
-    error: function (error) {
-      console.log("AJAX request error:");
-      console.log(error);
-    }
+    success: handleAjaxResponse(response),
+    error: handleAjaxError(error)
   });
 }
 
+function handleAjaxResponse(response) {
+  if (response == 0) {
+    $("#form")[0].reset();
+  } else {
+    alert(response);
+    console.log(response);
+  }
+}
+function handleAjaxError(error) {
+  console.log("AJAX request error:");
+  console.log(error);
+}
+
+
 function validateIncomingData() {
   var allFieldsFilled = true;
-  
+
   $(document).find("textarea").each(function () {
     if ($(this).val() == "") {
       allFieldsFilled = false;
