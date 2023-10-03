@@ -185,12 +185,12 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- View `egzamin_zawodowy`.`v_everything`
+-- View `egzamin_zawodowy`.`v_replies`
 -- -----------------------------------------------------
 
-DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_everything`;
+DROP TABLE IF EXISTS `egzamin_zawodowy`.`v_replies`;
 USE `egzamin_zawodowy`;
-CREATE VIEW `v_everything` AS
+CREATE VIEW `v_replies` AS
   SELECT `users_data`.`id` AS `reply_id`,
   `users_data`.`view_date_time` AS `reply_date_time`,
   `users_data`.`answ_id` AS `answer_id`,
@@ -208,17 +208,17 @@ CREATE VIEW `v_everything` AS
 
 CREATE VIEW `v_questions_cards` AS
   SELECT 
-    MAX(`v_everything`.`reply_date_time`) AS `last_seen`,
-    COUNT(`v_everything`.`answer_id`) AS `reply_count`,
-    `v_everything`.`question_id` AS `question_id`,
-    `v_everything`.`question_content` AS `question_content`,
+    MAX(`v_replies`.`reply_date_time`) AS `last_seen`,
+    COUNT(`v_replies`.`answer_id`) AS `reply_count`,
+    `v_replies`.`question_id` AS `question_id`,
+    `v_replies`.`question_content` AS `question_content`,
     (SELECT 
       COUNT(`users_data`.`id`)
         FROM
             (`users_data`
             JOIN `answers` ON ((`users_data`.`answ_id` = `answers`.`id`)))
         WHERE
-            ((`answers`.`ques_id` = `v_everything`.`question_id`)
+            ((`answers`.`ques_id` = `v_replies`.`question_id`)
                 AND (`answers`.`is_correct` = 1))) AS `correct_replies`,
     (SELECT 
             COUNT(`users_data`.`id`)
@@ -226,11 +226,11 @@ CREATE VIEW `v_questions_cards` AS
             (`users_data`
             JOIN `answers` ON ((`users_data`.`answ_id` = `answers`.`id`)))
         WHERE
-            ((`answers`.`ques_id` = `v_everything`.`question_id`)
+            ((`answers`.`ques_id` = `v_replies`.`question_id`)
                 AND (`answers`.`is_correct` = 0))) AS `incorrect_replies`
     FROM
-        `v_everything`
-    GROUP BY `v_everything`.`question_id`;
+        `v_replies`
+    GROUP BY `v_replies`.`question_id`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
