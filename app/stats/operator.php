@@ -202,9 +202,11 @@ class QuestionsCardsView
         $result = $connection->query($this->summary_sql);
         $row = $result->fetch(PDO::FETCH_ASSOC);
         extract($row);
-        $total_correct_procentage = $total_correct_replies/($total_replies)*100;
-        $total_incorrect_procentage = $total_incorrect_replies/($total_replies)*100;
-        include("summary-stats-card.php");
+        if ($total_replies != 0) {
+            $total_correct_procentage = $total_correct_replies/($total_replies)*100;
+            $total_incorrect_procentage = $total_incorrect_replies/($total_replies)*100;
+            include("summary-stats-card.php");
+        }
     }
 
     function __construct($connection)
