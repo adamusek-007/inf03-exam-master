@@ -44,7 +44,7 @@ class Question
         $this->set_id(intval($row['id']));
         $this->set_content($row['content']);
         $this->set_image_path($row['image_path']);
-        setcookie("ques_id", $this->get_id());
+        setcookie("question_id", $this->get_id());
     }
 }
 
