@@ -47,11 +47,6 @@ class Question
         setcookie("ques_id", $this->get_id());
     }
 }
-function setCookies(int $id)
-{
-    setcookie("ques_id", "", time() - 1);
-    
-}
 
 class Answers
 {
