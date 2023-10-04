@@ -1,6 +1,6 @@
 <?php
 include ("../database/connection.php");
-include ("operator.php");
+include ("controller.php");
 ?>
 <link rel="stylesheet" href="../resources/styles/stats.css">
 
