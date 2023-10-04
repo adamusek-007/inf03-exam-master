@@ -12,16 +12,16 @@
 <body>
     <form id="form" method="post" class="first-site-form">
         <label for="user-answer">
-            <?=$question->get_content()?>
+            <?= $question->get_content() ?>
         </label>
-        <?=$question->print_image()?>
+        <?= $question->print_image() ?>
         <fieldset id="user-answer">
             <legend>Wybierz odpowiedź</legend>
-            <?php $answers->print()?>
+            <?php $answers->print() ?>
         </fieldset>
     </form>
     <details>
-        <p>Id pytania: <?=$question->get_id()?></p>
+        <p>Id pytania: <?= $question->get_id() ?></p>
     </details>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="check-answer-and-submit.js"></script>

@@ -1,5 +1,4 @@
 <?php
-
 class ViewGenereator
 {
     private function get_view_generating_type()
@@ -68,7 +67,8 @@ class QuestionsCardsView
 
     function get_summary_stats($connection)
     {
-        $row = $connection->query($this->summary_sql)->fetch(PDO::FETCH_ASSOC);;
+        $row = $connection->query($this->summary_sql)->fetch(PDO::FETCH_ASSOC);
+        ;
         extract($row);
         if ($total_replies != 0) {
             $total_correct_procentage = $total_correct_replies / ($total_replies) * 100;

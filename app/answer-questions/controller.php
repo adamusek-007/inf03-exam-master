@@ -27,7 +27,8 @@ class Question
     {
         $this->image_path = $path;
     }
-    public function get_image_path():string {
+    public function get_image_path(): string
+    {
         return $this->image_path;
     }
     public function print_image()
@@ -51,7 +52,7 @@ class Question
 class Answers
 {
     private string $query = "CALL getQuestionAnswers(%d);";
-    private array $array= [];
+    private array $array = [];
     function set_array($result)
     {
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -73,7 +74,7 @@ class Answers
         $this->set_array($result);
         shuffle($this->array);
     }
-    
+
 }
 $question = new Question();
 $answers = new Answers($question->get_id());

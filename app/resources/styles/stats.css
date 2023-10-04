@@ -3,47 +3,58 @@
     font-size: 15px;
     color: white;
 }
+
 body {
     background-color: #212529;
 }
 
-.questions-question-card + .questions-question-card {
+.questions-question-card+.questions-question-card {
     margin-top: 10px;
 }
+
 .questions-question-card {
     padding: 10px;
     background-color: #17181a;
 }
+
 .questions-question-content {
     margin-bottom: 5px;
     font-size: 18px;
 }
+
 .top-section {
     background-color: #17181a;
 }
+
 .answer-block {
     display: flex;
     flex-direction: row;
 }
+
 .answers-section {
     display: flex;
     flex-direction: column;
 }
+
 .questions-question-card {
     display: flex;
     flex-direction: row;
 }
+
 header {
     display: block;
 }
-header section{
+
+header section {
     width: 80%;
     float: left;
 }
+
 header svg {
     width: 20%;
     float: left;
 }
+
 main {
     clear: both;
 }

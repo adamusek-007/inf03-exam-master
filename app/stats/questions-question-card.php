@@ -22,10 +22,11 @@
         </section>
     </section>
     <svg viewBox="0 0 64 64" class="small-pie" style="width: 100px; border-radius: 50%;">
-        <circle r="25%" cx="50%" cy="50%" style="stroke-dasharray: <?=$incorrect_procentage?> <?=$correct_procentage?> ">
+        <circle r="25%" cx="50%" cy="50%"
+            style="stroke-dasharray: <?= $incorrect_procentage ?> <?= $correct_procentage ?> ">
         </circle>
         <circle r="25%" cx="50%" cy="50%"
-            style="stroke-dasharray: <?=$correct_procentage?> <?=$incorrect_procentage?> ; stroke: green; stroke-dashoffset: <?=$correct_procentage?>">
+            style="stroke-dasharray: <?= $correct_procentage ?> <?= $incorrect_procentage ?> ; stroke: green; stroke-dashoffset: <?= $correct_procentage ?>">
         </circle>
     </svg>
     <style>
