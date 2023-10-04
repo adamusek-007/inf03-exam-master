@@ -2,7 +2,7 @@
 
 class ViewGenereator
 {
-    private function get_view_generation_type()
+    private function get_view_generating_type()
     {
         if ($this->is_get_request()) {
             $get_size = $this->check_get_request_size();
@@ -40,7 +40,7 @@ class ViewGenereator
     }
     function __construct($connection)
     {
-        $generating_type = $this->get_view_generation_type();
+        $generating_type = $this->get_view_generating_type();
         if ($generating_type == "questions") {
             new QuestionsCardsView($connection);
         } else {
@@ -48,6 +48,68 @@ class ViewGenereator
         }
     }
 }
+class QuestionsCardsView
+{
+    private $summary_sql = "CALL getSummaryStats();";
+    private $sql = "CALL getQuestionsCardsView();";
+
+    function get_each_question_stats($connection)
+    {
+        $result = $connection->query($this->sql);
+        echo "<main>";
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $correct_procentage = $correct_replies / ($correct_replies + $incorrect_replies) * 100;
+            $incorrect_procentage = $incorrect_replies / ($correct_replies + $incorrect_replies) * 100;
+            include("questions-question-card.php");
+        }
+        echo "</main>";
+    }
+
+    function get_summary_stats($connection)
+    {
+        $result = $connection->query($this->summary_sql);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        if ($total_replies != 0) {
+            $total_correct_procentage = $total_correct_replies / ($total_replies) * 100;
+            $total_incorrect_procentage = $total_incorrect_replies / ($total_replies) * 100;
+            include("summary-stats-card.php");
+        }
+    }
+
+    function __construct($connection)
+    {
+        $this->get_summary_stats($connection);
+        $this->get_each_question_stats($connection);
+    }
+
+}
+class QuestionCardView
+{
+    private $question_id;
+
+    private function genreate_view($connection)
+    {
+        $top = new CardTopSection($connection);
+        $mid = new CardMidSection($connection);
+        $bottom = new CardBottomSection($connection);
+
+        $question_content = $top->get_question_content();
+        $question_image = $top->get_question_image();
+        $question_answers = $top->get_question_answers();
+
+        $replies = $bottom->get_replies();
+
+        include("./question-card.php");
+    }
+    function __construct($connection)
+    {
+        $this->question_id = $_GET["question-id"];
+        $this->genreate_view($connection);
+    }
+}
+
 class CardTopSection
 {
     private $question_content;
@@ -68,7 +130,6 @@ class CardTopSection
     {
         return $this->question_image;
     }
-
     function set_question_content_and_image($question_id, $connection)
     {
         $sql = "SELECT `questions`.`content` as `question_content`, `questions`.`image_path` as `question_image` FROM `questions` WHERE `id` = {$question_id};";
@@ -92,18 +153,6 @@ class CardTopSection
         $question_id = $_GET["question-id"];
         $this->set_question_content_and_image($question_id, $connection);
         $this->set_question_answers($question_id, $connection);
-    }
-}
-class Answer
-{
-    public $id;
-    public $content;
-    public $is_correct;
-    function __construct($id, $content, $is_correct)
-    {
-        $this->id = $id;
-        $this->content = $content;
-        $this->is_correct = $is_correct;
     }
 }
 class CardMidSection
@@ -141,6 +190,18 @@ class CardBottomSection
 
     }
 }
+class Answer
+{
+    public $id;
+    public $content;
+    public $is_correct;
+    function __construct($id, $content, $is_correct)
+    {
+        $this->id = $id;
+        $this->content = $content;
+        $this->is_correct = $is_correct;
+    }
+}
 class Reply
 {
 
@@ -156,65 +217,6 @@ class Reply
         $this->reply_date_time = $reply_date_time;
         $this->number = $number;
     }
-}
-class QuestionCardView
-{
-    private $question_id;
-
-    private function genreate_view($connection)
-    {
-        $top = new CardTopSection($connection);
-        $mid = new CardMidSection($connection);
-        $bottom = new CardBottomSection($connection);
-
-        $question_content = $top->get_question_content();
-        $question_image = $top->get_question_image();
-        $question_answers = $top->get_question_answers();
-
-        $replies = $bottom->get_replies();
-
-        include("./question-card.php");
-    }
-    function __construct($connection)
-    {
-        $this->question_id = $_GET["question-id"];
-        $this->genreate_view($connection);
-    }
-}
-class QuestionsCardsView
-{
-    private $summary_sql = "CALL getSummaryStats();";
-    private $sql = "CALL getQuestionsCardsView();";
-
-    function get_each_question_stats($connection) {
-        $result = $connection->query($this->sql);
-        echo "<main>";
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
-            $correct_procentage = $correct_replies/($correct_replies + $incorrect_replies)*100;
-            $incorrect_procentage = $incorrect_replies/($correct_replies + $incorrect_replies)*100;
-            include("questions-question-card.php");
-        }
-        echo "</main>";
-    }
-
-    function get_summary_stats($connection) {
-        $result = $connection->query($this->summary_sql);
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        extract($row);
-        if ($total_replies != 0) {
-            $total_correct_procentage = $total_correct_replies/($total_replies)*100;
-            $total_incorrect_procentage = $total_incorrect_replies/($total_replies)*100;
-            include("summary-stats-card.php");
-        }
-    }
-
-    function __construct($connection)
-    {
-        $this->get_summary_stats($connection);
-        $this->get_each_question_stats($connection);
-    }
-    
 }
 $connection = get_database_connection();
 $view_generator = new ViewGenereator($connection);
