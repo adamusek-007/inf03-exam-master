@@ -75,12 +75,9 @@ function insert_data(bool $has_image)
     echo 0;
 }
 
-$is_data_complete = check_data_completion();
-if ($is_data_complete) {
-    $is_image_attached = check_image_attachment();
-    if ($is_image_attached) {
-        $is_image_type_correct = check_image_type_correctness();
-        if ($is_image_type_correct) {
+if (check_data_completion()) {
+    if (check_image_attachment()) {
+        if (check_image_type_correctness()) {
             upload_image();
             insert_data(true);
         } else {
