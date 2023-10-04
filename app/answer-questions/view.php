@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <form id="form" action="./" method="post" class="first-site-form">
+    <form id="form" method="post" class="first-site-form">
         <label for="user-answer">
             <?=$question->get_content()?>
         </label>
