@@ -15,7 +15,7 @@ function create_dsn() {
 *
 * @return PDO|null A PDO database connection object, or null on failure.
 */
-function get_database_connection(): PDO
+function get_database_connection(): PDO|null
 {
    static $pdo;
    
