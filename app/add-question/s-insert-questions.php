@@ -13,11 +13,10 @@ function check_data_completion(): bool
 }
 function check_image_attachment(): bool
 {
-    if ($_FILES["image"]["name"] == "") {
-        return false;
-    } else {
+    if ($_FILES["image"]["name"] != "") {
         return true;
     }
+    return false;
 }
 function check_image_type_correctness(): bool
 {
