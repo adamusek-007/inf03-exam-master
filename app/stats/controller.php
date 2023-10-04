@@ -68,8 +68,7 @@ class QuestionsCardsView
 
     function get_summary_stats($connection)
     {
-        $result = $connection->query($this->summary_sql);
-        $row = $result->fetch(PDO::FETCH_ASSOC);
+        $row = $connection->query($this->summary_sql)->fetch(PDO::FETCH_ASSOC);;
         extract($row);
         if ($total_replies != 0) {
             $total_correct_procentage = $total_correct_replies / ($total_replies) * 100;
@@ -91,9 +90,9 @@ class QuestionCardView
 
     private function genreate_view($connection)
     {
-        $top = new CardTopSection($connection);
-        $mid = new CardMidSection($connection);
-        $bottom = new CardBottomSection($connection);
+        $top = new QuestionCardTop($connection);
+        $mid = new QuestionCardMid($connection);
+        $bottom = new QuestionCardBottom($connection);
 
         $question_content = $top->get_question_content();
         $question_image = $top->get_question_image();
@@ -109,8 +108,7 @@ class QuestionCardView
         $this->genreate_view($connection);
     }
 }
-
-class CardTopSection
+class QuestionCardTop
 {
     private $question_content;
 
@@ -155,7 +153,7 @@ class CardTopSection
         $this->set_question_answers($question_id, $connection);
     }
 }
-class CardMidSection
+class QuestionCardMid
 {
     function generate_svg_chart()
     {
@@ -168,7 +166,7 @@ class CardMidSection
         $this->generate_svg_chart();
     }
 }
-class CardBottomSection
+class QuestionCardBottom
 {
     private $replies;
 
@@ -204,7 +202,6 @@ class Answer
 }
 class Reply
 {
-
     public $number;
     public $answer_id;
     public $answer_correcness;

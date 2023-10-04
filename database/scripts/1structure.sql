@@ -49,13 +49,13 @@ CREATE TABLE `questions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `users_data`
+-- Table structure for table `replies`
 --
 
-DROP TABLE IF EXISTS `users_data`;
+DROP TABLE IF EXISTS `replies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users_data` (
+CREATE TABLE `replies` (
   `id` int NOT NULL AUTO_INCREMENT,
   `answ_id` int DEFAULT NULL,
   `view_date_time` datetime DEFAULT NULL,
@@ -166,9 +166,9 @@ BEGIN
     DECLARE answer_id INT;
 	IF (in_answer_content != "Nie wiem") THEN 
 		SET answer_id = (SELECT `answers`.`id` FROM `answers` WHERE `content` = in_answer_content AND `ques_id` = in_ques_id LIMIT 1);
-		INSERT INTO `users_data` (`answ_id`, `view_date_time`) VALUES (answer_id, NOW());
+		INSERT INTO `replies` (`answ_id`, `view_date_time`) VALUES (answer_id, NOW());
 	-- ELSE
-		-- INSERT INTO `users_data` (`ques_id`, `view_date_time`) VALUES (in_ques_id, NOW());
+		-- INSERT INTO `replies` (`ques_id`, `view_date_time`) VALUES (in_ques_id, NOW());
     END IF;
 END ;;
 DELIMITER ;
@@ -330,7 +330,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `v_all_replies_data` AS select `users_data`.`id` AS `reply_id`,`users_data`.`view_date_time` AS `reply_date_time`,`users_data`.`answ_id` AS `answer_id`,`answers`.`content` AS `answer_content`,`answers`.`is_correct` AS `answer_correctness`,`questions`.`id` AS `question_id`,`questions`.`content` AS `question_content` from ((`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) join `questions` on((`answers`.`ques_id` = `questions`.`id`))) */;
+/*!50001 VIEW `v_all_replies_data` AS select `replies`.`id` AS `reply_id`,`replies`.`view_date_time` AS `reply_date_time`,`replies`.`answ_id` AS `answer_id`,`answers`.`content` AS `answer_content`,`answers`.`is_correct` AS `answer_correctness`,`questions`.`id` AS `question_id`,`questions`.`content` AS `question_content` from ((`replies` join `answers` on((`replies`.`answ_id` = `answers`.`id`))) join `questions` on((`answers`.`ques_id` = `questions`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -348,7 +348,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `v_questions_cards` AS select max(`v_all_replies_data`.`reply_date_time`) AS `last_seen`,count(`v_all_replies_data`.`answer_id`) AS `reply_count`,`v_all_replies_data`.`question_id` AS `question_id`,`v_all_replies_data`.`question_content` AS `question_content`,(select count(`users_data`.`id`) from (`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 1))) AS `correct_replies`,(select count(`users_data`.`id`) from (`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 0))) AS `incorrect_replies` from `v_all_replies_data` group by `v_all_replies_data`.`question_id` */;
+/*!50001 VIEW `v_questions_cards` AS select max(`v_all_replies_data`.`reply_date_time`) AS `last_seen`,count(`v_all_replies_data`.`answer_id`) AS `reply_count`,`v_all_replies_data`.`question_id` AS `question_id`,`v_all_replies_data`.`question_content` AS `question_content`,(select count(`replies`.`id`) from (`replies` join `answers` on((`replies`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 1))) AS `correct_replies`,(select count(`replies`.`id`) from (`replies` join `answers` on((`replies`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 0))) AS `incorrect_replies` from `v_all_replies_data` group by `v_all_replies_data`.`question_id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
