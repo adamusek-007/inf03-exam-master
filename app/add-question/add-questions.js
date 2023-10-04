@@ -6,7 +6,7 @@ function submitHandler() {
   $("#form").on("submit", (event) => {
     event.preventDefault();
     if (validateIncomingData()) {
-      makeAjaxRequest(new FormData(this));
+      makeAjaxRequest(new FormData(this.form));
     } else {
       alert("Wymagane pola nie są wypełnione.");
     }
@@ -44,9 +44,11 @@ function displaySuccessDialog() {
 }
 
 function validateIncomingData() {
+  // TODO REFACTOR not working
   $(document).find("textarea").each(function () {
     if ($(this).val() == "") {
       return false;
     }
+    return true;
   });
 }
