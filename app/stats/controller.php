@@ -115,7 +115,7 @@ class CardMidSection
     function __construct($connection)
     {
         $question_id = $_GET["question-id"];
-        $sql = "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM v_everything WHERE {$question_id};";
+        $sql = "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM `v_all_replies_data` WHERE {$question_id};";
         $this->generate_svg_chart();
     }
 }
@@ -131,7 +131,7 @@ class CardBottomSection
     function __construct($connection)
     {
         $question_id = $_GET["question-id"];
-        $sql = "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM `v_everything` WHERE `question_id` = {$question_id};";
+        $sql = "SELECT `reply_date_time`, `answer_id`, `answer_correctness` FROM `v_all_replies_data` WHERE `question_id` = {$question_id};";
         $result = $connection->query($sql);
         $this->replies = [];
         $i = 1;

@@ -66,14 +66,14 @@ CREATE TABLE `users_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Temporary view structure for view `v_everything`
+-- Temporary view structure for view `v_all_replies_data`
 --
 
-DROP TABLE IF EXISTS `v_everything`;
-/*!50001 DROP VIEW IF EXISTS `v_everything`*/;
+DROP TABLE IF EXISTS `v_all_replies_data`;
+/*!50001 DROP VIEW IF EXISTS `v_all_replies_data`*/;
 SET @saved_cs_client     = @@character_set_client;
 /*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `v_everything` AS SELECT 
+/*!50001 CREATE VIEW `v_all_replies_data` AS SELECT 
  1 AS `reply_id`,
  1 AS `reply_date_time`,
  1 AS `answer_id`,
@@ -309,7 +309,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`%` PROCEDURE `getSummaryStats`()
 BEGIN
-SELECT SUM(answer_correctness) as `total_correct_replies`, COUNT(question_id) as `total_replies`, COUNT(question_id)-SUM(answer_correctness) as `total_incorrect_replies` FROM v_everything;
+SELECT SUM(answer_correctness) as `total_correct_replies`, COUNT(question_id) as `total_replies`, COUNT(question_id)-SUM(answer_correctness) as `total_incorrect_replies` FROM v_all_replies_data;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -318,10 +318,10 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
--- Final view structure for view `v_everything`
+-- Final view structure for view `v_all_replies_data`
 --
 
-/*!50001 DROP VIEW IF EXISTS `v_everything`*/;
+/*!50001 DROP VIEW IF EXISTS `v_all_replies_data`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
@@ -330,7 +330,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `v_everything` AS select `users_data`.`id` AS `reply_id`,`users_data`.`view_date_time` AS `reply_date_time`,`users_data`.`answ_id` AS `answer_id`,`answers`.`content` AS `answer_content`,`answers`.`is_correct` AS `answer_correctness`,`questions`.`id` AS `question_id`,`questions`.`content` AS `question_content` from ((`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) join `questions` on((`answers`.`ques_id` = `questions`.`id`))) */;
+/*!50001 VIEW `v_all_replies_data` AS select `users_data`.`id` AS `reply_id`,`users_data`.`view_date_time` AS `reply_date_time`,`users_data`.`answ_id` AS `answer_id`,`answers`.`content` AS `answer_content`,`answers`.`is_correct` AS `answer_correctness`,`questions`.`id` AS `question_id`,`questions`.`content` AS `question_content` from ((`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) join `questions` on((`answers`.`ques_id` = `questions`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -348,7 +348,7 @@ DELIMITER ;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `v_questions_cards` AS select max(`v_everything`.`reply_date_time`) AS `last_seen`,count(`v_everything`.`answer_id`) AS `reply_count`,`v_everything`.`question_id` AS `question_id`,`v_everything`.`question_content` AS `question_content`,(select count(`users_data`.`id`) from (`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_everything`.`question_id`) and (`answers`.`is_correct` = 1))) AS `correct_replies`,(select count(`users_data`.`id`) from (`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_everything`.`question_id`) and (`answers`.`is_correct` = 0))) AS `incorrect_replies` from `v_everything` group by `v_everything`.`question_id` */;
+/*!50001 VIEW `v_questions_cards` AS select max(`v_all_replies_data`.`reply_date_time`) AS `last_seen`,count(`v_all_replies_data`.`answer_id`) AS `reply_count`,`v_all_replies_data`.`question_id` AS `question_id`,`v_all_replies_data`.`question_content` AS `question_content`,(select count(`users_data`.`id`) from (`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 1))) AS `correct_replies`,(select count(`users_data`.`id`) from (`users_data` join `answers` on((`users_data`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 0))) AS `incorrect_replies` from `v_all_replies_data` group by `v_all_replies_data`.`question_id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
