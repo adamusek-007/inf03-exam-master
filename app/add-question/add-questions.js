@@ -1,55 +1,59 @@
 $(document).ready(function () {
-  submitHandler();
-});
-
-function submitHandler() {
-  $("#form").on("submit", (event) => {
+  $("#form").on("submit", function (event) {
     event.preventDefault();
     if (validateIncomingData()) {
-      makeAjaxRequest(new FormData(this.form));
+      makeAjaxRequest(new FormData(this));
     } else {
       alert("Wymagane pola nie są wypełnione.");
     }
-  })
-}
-
-function makeAjaxRequest(formData) {
-  $.ajax({
-    type: "POST",
-    url: "s-insert-questions.php",
-    data: formData,
-    processData: false,
-    contentType: false,
-    success: (response) => { handleAjaxResponse(response) },
-    error: (error) => { alert(error); }
   });
-}
 
-function handleAjaxResponse(response) {
-  if (response == 0) {
-    displaySuccessDialog();
-    resetForm();
-  } else {
-    alert(response);
+  function makeAjaxRequest(formData) {
+    $.ajax({
+      type: "POST",
+      url: "s-insert-questions.php",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: handleAjaxResponse,
+      error: handleAjaxError,
+    });
   }
-}
 
-function resetForm(){
-  $("#form")[0].reset();
-}
-
-function displaySuccessDialog() {
-  $("#message").text("Pomyślnie dodano do bazy.");
-  setTimeout(() => { $("#message").text("") }, 1500)
-}
-
-function validateIncomingData() {
-  return true;
-  // TODO REFACTOR not working
-  $(document).find("textarea").each(function () {
-    if ($(this).val() == "") {
-      return false;
+  function handleAjaxResponse(response) {
+    if (response === "0") {
+      displaySuccessDialog();
+      resetForm();
+    } else {
+      alert(response);
     }
-    
-  });
-}
+  }
+
+  function resetForm() {
+    $("#form")[0].reset();
+  }
+
+  function displaySuccessDialog() {
+    $("#message").text("Pomyślnie dodano do bazy.");
+    setTimeout(() => {
+      $("#message").text("");
+    }, 1500);
+  }
+
+  function validateIncomingData() {
+    let isValid = true;
+    $(document)
+      .find("textarea")
+      .each(function () {
+        if ($(this).val() === "") {
+          isValid = false;
+          return false;
+        }
+      });
+    return isValid;
+  }
+
+  function handleAjaxError(error) {
+    alert("There was an error: " + error.statusText);
+  }
+});
