@@ -7,9 +7,10 @@ function checkAndSubmit(userReplyAnswer) {
         error: (error) => { alert(error) }
     });
 }
-function handleAjaxResponse(response, userReplyAnswer) {
-    var is_correct = getReplyCorrectness(response);
-    if (is_correct == 1) {
+function handleAjaxResponse(textResponse, userReplyAnswer) {
+    response = JSON.parse(textResponse);
+    var is_correct = response.reply_correctness
+    if (is_correct) {
         replySuccess(userReplyAnswer);
     } else {
         replyFailure(response, userReplyAnswer)
@@ -22,7 +23,7 @@ function replySuccess(userReplyAnswer) {
 
 function replyFailure(response, userReplyAnswer) {
     setElementBackground(userReplyAnswer, "red");
-    var correct_answer = response.substr(1);
+    var correct_answer = response.correct_answer;
     setElementBackground(correct_answer, "green");
     submitForm(1500);
 }
@@ -37,5 +38,5 @@ function setElementBackground(value, color) {
 }
 
 function getReplyCorrectness(response) {
-    return response.substr(0, 1);
+    return response.reply_correctness
 }
