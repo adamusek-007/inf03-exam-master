@@ -2,31 +2,38 @@
 <html lang="pl-PL">
 
 <head>
-    <title>Wstaw pytanie</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wstaw pytanie</title>
     <link rel="stylesheet" href="../resources/styles/insert-question.css">
 </head>
 
 <body>
     <header id="message"></header>
     <form enctype="multipart/form-data" id="form">
-        <label>*Wpisz treść: </label>
+        <label for="content">*Wpisz treść:</label>
         <textarea name="content" id="content" required></textarea>
-        <label>Załącz zdjęcie: </label>
-        <input name="image" id="image" type="file" accept=".jpg,.jpeg, .png">
-        <label>*Poprawna odpowiedź:</label>
+
+        <label for="image">Załącz zdjęcie:</label>
+        <input name="image" id="image" type="file" accept=".jpg,.jpeg,.png">
+
+        <label for="c-answer">*Poprawna odpowiedź:</label>
         <textarea name="c-answer" id="c-answer" required></textarea>
-        <label>*Niepoprawna odpowiedź: </label>
+
+        <label for="w-answer-1">*Niepoprawna odpowiedź:</label>
         <textarea name="w-answer-1" id="w-answer-1" required></textarea>
-        <label>*Niepoprawna odpowiedź: </label>
+
+        <label for="w-answer-2">*Niepoprawna odpowiedź:</label>
         <textarea name="w-answer-2" id="w-answer-2" required></textarea>
-        <label>*Niepoprawna odpowiedź: </label>
+
+        <label for="w-answer-3">*Niepoprawna odpowiedź:</label>
         <textarea name="w-answer-3" id="w-answer-3" required></textarea>
+
         <input type="submit">
     </form>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="add-questions.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js" async></script>
+    <script src="add-questions.js" async></script>
 </body>
 
 </html>
