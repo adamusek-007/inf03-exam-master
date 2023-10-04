@@ -1,13 +1,17 @@
 $(document).ready(function () {
-  $("#form").on("submit", function (event) {
+  submitHandler();
+});
+
+function submitHandler() {
+  $("#form").on("submit", (event) => {
     event.preventDefault();
     if (validateIncomingData()) {
       makeAjaxRequest(new FormData(this));
     } else {
-      alert("Please fill out all required fields before submitting.");
+      alert("Wymagane pola nie są wypełnione.");
     }
   })
-});
+}
 
 function makeAjaxRequest(formData) {
   $.ajax({
@@ -16,34 +20,33 @@ function makeAjaxRequest(formData) {
     data: formData,
     processData: false,
     contentType: false,
-    success: (response)=> { handleAjaxResponse(response)},
-    error: (error)=>{handleAjaxError(error)}
+    success: (response) => { handleAjaxResponse(response) },
+    error: (error) => { alert(error); }
   });
 }
 
 function handleAjaxResponse(response) {
   if (response == 0) {
-    $("#form")[0].reset();
+    displaySuccessDialog();
+    resetForm();
   } else {
     alert(response);
-    console.log(response);
   }
 }
-function handleAjaxError(error) {
-  console.log("AJAX request error:");
-  console.log(error);
+
+function resetForm(){
+  $("#form")[0].reset();
 }
 
+function displaySuccessDialog() {
+  $("#message").text("Pomyślnie dodano do bazy.");
+  setTimeout(() => { $("#message").text("") }, 1500)
+}
 
 function validateIncomingData() {
-  var allFieldsFilled = true;
-
   $(document).find("textarea").each(function () {
     if ($(this).val() == "") {
-      allFieldsFilled = false;
       return false;
     }
   });
-
-  return allFieldsFilled;
 }
