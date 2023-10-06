@@ -23,10 +23,12 @@ $(document).ready(function () {
   function handleAjaxResponse(textResponse) {
     response = JSON.parse(textResponse);
     if (response.status === "success") {
-      displaySuccessDialog();
+      displayDialog("Pomyślnie dodano do bazy.");
       resetForm();
-    } else {
-      alert(response);
+    } else if (response.status === "error"){
+      displayDialog(response.message);
+    }else {
+      alert(response.status);
     }
   }
 
@@ -34,8 +36,8 @@ $(document).ready(function () {
     $("#form")[0].reset();
   }
 
-  function displaySuccessDialog() {
-    $("#message").text("Pomyślnie dodano do bazy.");
+  function displayDialog(dialogContent) {
+    $("#message").text(dialogContent);
     setTimeout(() => {
       $("#message").text("");
     }, 1500);
