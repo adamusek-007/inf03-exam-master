@@ -22,7 +22,8 @@ $(document).ready(function () {
 
   function handleAjaxResponse(textResponse) {
     response = JSON.parse(textResponse);
-    displayMessage(response.status,response.message);
+    displayMessage(response.status, response.message);
+    // TODO CHANGE RESPONSE STATUS to true or false;
     if(response.status = "success") {
       resetForm();
     }

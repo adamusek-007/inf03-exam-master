@@ -6,25 +6,13 @@ class Image
     private bool|null $is_attached = null;
     private bool|null $is_type_correct = null;
     private string $name = "";
-    private function set_attachness(bool $is_attached)
-    {
-        $this->is_attached = $is_attached;
-    }
     public function get_attachness(): bool
     {
         return $this->is_attached;
     }
-    private function set_type_correctness(bool $is_type_correct)
-    {
-        $this->is_type_correct = $is_type_correct;
-    }
     public function get_type_correctness(): bool
     {
         return $this->is_type_correct;
-    }
-    private function set_name(string $name)
-    {
-        $this->name = $name;
     }
     public function get_name(): string
     {
@@ -32,37 +20,34 @@ class Image
     }
     private function check_is_image_attached()
     {
-        $this->set_attachness(
+        $this->is_attached = (
             array_key_exists("image", $_FILES) &&
             array_key_exists("type", $_FILES["image"]) &&
             $_FILES["image"]["type"] !== ""
         );
     }
-
     private function check_is_type_correct()
     {
         $uploaded_file_type = $_FILES["image"]["type"];
-        $this->set_type_correctness(in_array($uploaded_file_type, Image::$supported_file_types));
+        $this->is_type_correct = in_array($uploaded_file_type, Image::$supported_file_types);
     }
     public function upload()
     {
         $target_file_dir = QuestionInserter::$file_upload_dir . basename($_FILES["image"]["name"]);
         move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_dir);
     }
-
-
     public function __construct()
     {
         $this->check_is_image_attached();
         if ($this->get_attachness()) {
             $this->check_is_type_correct();
             if ($this->get_type_correctness()) {
-                $this->set_name($_FILES["image"]["name"]);
+                $this->name = $_FILES["image"]["name"];
             }
         }
     }
 }
-class FormDataValidator
+class FormFieldsValidator
 {
     private bool $data_completition;
 
@@ -75,10 +60,6 @@ class FormDataValidator
             "w-answer-3"
         ];
 
-    private function set_data_completition(bool $data_complete)
-    {
-        $this->data_completition = $data_complete;
-    }
     public function get_data_completition(): bool
     {
         return $this->data_completition;
@@ -87,11 +68,11 @@ class FormDataValidator
     {
         foreach ($this::$expected_data_fields as $field_name) {
             if (!isset($_POST[$field_name]) || empty($_POST[$field_name])) {
-                $this->set_data_completition(FALSE);
+                $this->data_completition = FALSE;
                 return;
             }
         }
-        $this->set_data_completition(TRUE);
+        $this->data_completition = TRUE;
     }
     public function __construct()
     {
@@ -102,7 +83,7 @@ class QuestionInserter
 {
     public static string $file_upload_dir = "../resources/images/";
 
-    public function __construct(FormDataValidator $form_validator)
+    public function __construct(FormFieldsValidator $form_validator)
     {
         if ($form_validator->get_data_completition()) {
             $this->internal_proceed();
@@ -149,7 +130,7 @@ class QuestionInserter
         echo $JSON_response;
 
     }
-    function get_question_insert_query(bool $has_image): string
+    private function get_question_insert_query(bool $has_image): string
     {
         $add_question_query = "CALL addQuestion(\"%s\", %d, \"%s\");";
         if ($has_image) {
@@ -158,7 +139,7 @@ class QuestionInserter
             return sprintf($add_question_query, $_POST['content'], $has_image, 'NULL');
         }
     }
-    function get_answers_insert_query(int $question_id)
+    private function get_answers_insert_query(int $question_id)
     {
         $query = "";
         $q_add_answer = "CALL addAnswer(%d, \"%s\", %d);";
@@ -173,13 +154,13 @@ class QuestionInserter
         return $query;
 
     }
-    function get_latest_question_id()
+    private function get_latest_question_id()
     {
         $connection = get_database_connection();
         $row = $connection->query("CALL getLatestAddedQuestionId();")->fetch(PDO::FETCH_ASSOC);
         return intval($row['id']);
     }
 }
-$form_validator = new FormDataValidator();
+$form_validator = new FormFieldsValidator();
 new QuestionInserter($form_validator);
 ?>
