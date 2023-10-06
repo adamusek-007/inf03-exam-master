@@ -11,7 +11,7 @@ $(document).ready(function () {
   function makeAjaxRequest(formData) {
     $.ajax({
       type: "POST",
-      url: "s-insert-questions.php",
+      url: "question-add-controller.php",
       data: formData,
       processData: false,
       contentType: false,
