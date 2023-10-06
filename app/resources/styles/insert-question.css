@@ -48,8 +48,12 @@ textarea {
     height: 60px;
 }
 
-#message {
-    position: absolute;
-    left: 50%;
-    top: 0;
+#message-box {
+    text-align: center;
+}
+.message-success{
+    color:greenyellow;
+}
+.message-error{
+    color: red;
 }

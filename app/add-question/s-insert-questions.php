@@ -133,9 +133,9 @@ class QuestionInserter
             $connection->query($this->get_question_insert_query($has_image));
             $question_id = $this->get_latest_question_id();
             $connection->query($this->get_answers_insert_query($question_id));
-            $this->create_response("success", "Question successfully inserted.");
+            $this->create_response("success", "Pytanie pomyślnie dodane do bazy danych");
         } catch (Exception $e) {
-            $this->create_response("error", "An error occurred. Please try again later.");
+            $this->create_response("error", "Wystąpił błąd: {$e}");
         }
 
     }

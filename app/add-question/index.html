@@ -9,7 +9,6 @@
 </head>
 
 <body>
-    <header id="message"></header>
     <form enctype="multipart/form-data" method="post" id="form">
         <label for="content">*Wpisz treść:</label>
         <textarea name="content" id="content" required></textarea>
@@ -31,9 +30,11 @@
 
         <input type="submit">
     </form>
+    <div id="message-box">
+    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js" async></script>
-    <script src="add-questions.js" async></script>
+    <script src="../resources/jquery/script.js" ></script>
+    <script src="add-questions.js" ></script>
 </body>
 
 </html>

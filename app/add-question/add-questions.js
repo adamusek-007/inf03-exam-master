@@ -1,10 +1,10 @@
 $(document).ready(function () {
   $("#form").on("submit", function (event) {
     event.preventDefault();
-    if (validateIncomingData()) {
+    if (validateRequiredFieldsData()) {
       makeAjaxRequest(new FormData(this));
     } else {
-      alert("Wymagane pola nie są wypełnione.");
+      displayMessage("error", "Wymagane pola nie są wypełnione.");
     }
   });
 
@@ -22,28 +22,33 @@ $(document).ready(function () {
 
   function handleAjaxResponse(textResponse) {
     response = JSON.parse(textResponse);
-    if (response.status === "success") {
-      displayDialog("Pomyślnie dodano do bazy.");
+    displayMessage(response.status,response.message);
+    if(response.status = "success") {
       resetForm();
-    } else if (response.status === "error"){
-      displayDialog(response.message);
-    }else {
-      alert(response.status);
     }
+  }
+
+  function handleAjaxError(error) {
+    displayMessage("error", "There was an error: " + error.statusText);
   }
 
   function resetForm() {
     $("#form")[0].reset();
   }
 
-  function displayDialog(dialogContent) {
-    $("#message").text(dialogContent);
-    setTimeout(() => {
-      $("#message").text("");
-    }, 1500);
+  function displayMessage(status, messageContent) {
+    
+    $("#message-box").addClass("message-"+status);
+    $("#message-box").text(messageContent)
+    setTimeout(clearMessageBox, 1500);
   }
 
-  function validateIncomingData() {
+  function clearMessageBox(){
+    $("#message-box").text("");
+    $("#message-box").removeClass();
+  }
+
+  function validateRequiredFieldsData() {
     let isValid = true;
     $(document)
       .find("textarea")
@@ -54,9 +59,5 @@ $(document).ready(function () {
         }
       });
     return isValid;
-  }
-
-  function handleAjaxError(error) {
-    alert("There was an error: " + error.statusText);
   }
 });
