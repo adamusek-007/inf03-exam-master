@@ -20,8 +20,9 @@ $(document).ready(function () {
     });
   }
 
-  function handleAjaxResponse(response) {
-    if (response === "0") {
+  function handleAjaxResponse(textResponse) {
+    response = JSON.parse(textResponse);
+    if (response.status === "success") {
       displaySuccessDialog();
       resetForm();
     } else {
