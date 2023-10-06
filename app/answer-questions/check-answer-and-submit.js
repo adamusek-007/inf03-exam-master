@@ -1,3 +1,6 @@
+$(".submit").on("click", function(){
+    checkAndSubmit(this.value);
+})
 function checkAndSubmit(userReplyAnswer) {
     $.ajax({
         type: "POST",

@@ -63,7 +63,7 @@ class Answers
     {
         foreach ($this->array as $answer) {
             $answer = htmlspecialchars($answer);
-            echo "<input type=\"button\" onclick=\"checkAndSubmit(this.value)\" name=\"user-answer\" value=\"{$answer}\"><br>";
+            echo "<input type=\"button\" class=\"submit\" name=\"user-answer\" value=\"{$answer}\"><br>";
         }
     }
     function __construct(int $question_id)
