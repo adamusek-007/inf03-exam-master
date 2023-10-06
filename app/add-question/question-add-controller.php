@@ -87,11 +87,11 @@ class FormDataValidator
     {
         foreach ($this::$expected_data_fields as $field_name) {
             if (!isset($_POST[$field_name]) || empty($_POST[$field_name])) {
-                $this->set_data_completition(false);
+                $this->set_data_completition(FALSE);
                 return;
             }
         }
-        $this->set_data_completition(true);
+        $this->set_data_completition(TRUE);
     }
     public function __construct()
     {
@@ -117,12 +117,12 @@ class QuestionInserter
         if ($image->get_attachness()) {
             if ($image->get_type_correctness()) {
                 $image->upload();
-                $this->insert_data(true);
+                $this->insert_data(TRUE);
             } else {
                 $this->create_response("error", "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.");
             }
         } else {
-            $this->insert_data(false);
+            $this->insert_data(FALSE);
         }
     }
 
