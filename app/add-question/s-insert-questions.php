@@ -1,51 +1,91 @@
 <?php
 include("../database/connection.php");
-class Form {
-    public static array $expected_fields_names = ["content", "c-answer", "w-answer-1", "w-answer-2", "w-answer-3"];
-
-}
-class Image {
+class Image
+{
     public static array $supported_file_types = ["image/jpeg", "image/jpg", "image/png"];
     private bool|null $is_attached = null;
     private bool|null $is_type_correct = null;
-    function __construct() {
-        
+    private string $name = "";
+    private function set_attachness(bool $is_attached)
+    {
+        $this->is_attached = $is_attached;
+    }
+    public function get_attachness(): bool
+    {
+        return $this->is_attached;
+    }
+    private function set_type_correctness(bool $is_type_correct)
+    {
+        $this->is_type_correct = $is_type_correct;
+    }
+    public function get_type_correctness(): bool
+    {
+        return $this->is_type_correct;
+    }
+    private function set_name(string $name)
+    {
+        $this->name = $name;
+    }
+    public function get_name(): string
+    {
+        return $this->name;
+    }
+    private function check_is_image_attached()
+    {
+        $this->set_attachness(
+            array_key_exists("image", $_FILES) &&
+            array_key_exists("type", $_FILES["image"]) &&
+            $_FILES["image"]["type"] !== ""
+        );
+    }
+
+    private function check_is_type_correct()
+    {
+        $uploaded_file_type = $_FILES["image"]["type"];
+        $this->set_type_correctness(in_array($uploaded_file_type, Image::$supported_file_types));
+    }
+    public function upload()
+    {
+        $target_file_dir = QuestionInserter::$file_upload_dir . basename($_FILES["image"]["name"]);
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_dir);
+    }
+
+
+    public function __construct()
+    {
+        $this->check_is_image_attached();
+        if ($this->get_attachness()) {
+            $this->check_is_type_correct();
+            if ($this->get_type_correctness()) {
+                $this->set_name($_FILES["image"]["name"]);
+            }
+        }
     }
 }
-class FormValidator
+class FormDataValidator
 {
     private bool $data_completition;
-    private bool|null $is_image_attached = null;
 
-    private bool|null $is_image_type_correct = null;
+    public static array $expected_data_fields =
+        [
+            "content",
+            "c-answer",
+            "w-answer-1",
+            "w-answer-2",
+            "w-answer-3"
+        ];
 
-    function set_data_completition(bool $data_complete)
+    private function set_data_completition(bool $data_complete)
     {
         $this->data_completition = $data_complete;
     }
-    function get_data_completition(): bool
+    public function get_data_completition(): bool
     {
         return $this->data_completition;
     }
-    function set_is_image_attached(bool $is_image_attached)
+    private function check_data_completion()
     {
-        $this->is_image_attached = $is_image_attached;
-    }
-    function get_image_attachness(): bool
-    {
-        return $this->is_image_attached;
-    }
-    function set_is_image_type_correct(bool $is_image_type_correct)
-    {
-        $this->is_image_type_correct = $is_image_type_correct;
-    }
-    function get_is_image_type_correct(): bool
-    {
-        return $this->is_image_type_correct;
-    }
-    function check_data_completion()
-    {
-        foreach (Form::$expected_fields_names as $field_name) {
+        foreach ($this::$expected_data_fields as $field_name) {
             if (!isset($_POST[$field_name]) || empty($_POST[$field_name])) {
                 $this->set_data_completition(false);
                 return;
@@ -53,83 +93,61 @@ class FormValidator
         }
         $this->set_data_completition(true);
     }
-    function check_is_image_attached()
-    {
-        $this->set_is_image_attached(
-            array_key_exists("image", $_FILES) &&
-            array_key_exists("type", $_FILES["image"]) &&
-            $_FILES["image"]["type"] !== ""
-        );
-    }
-    function check_is_image_type_correct()
-    {
-        $uploaded_file_type = $_FILES["image"]["type"];
-        $this->set_is_image_type_correct(in_array($uploaded_file_type, Image::$supported_file_types));
-    }
-    function __construct()
+    public function __construct()
     {
         $this->check_data_completion();
-        if ($this->get_data_completition()) {
-            $this->check_is_image_attached();
-            if ($this->get_image_attachness()) {
-                $this->check_is_image_type_correct();
-            }
-        }
     }
-
 }
 class QuestionInserter
 {
     public static string $file_upload_dir = "../resources/images/";
 
-    function __construct(FormValidator $form_validator)
+    public function __construct(FormDataValidator $form_validator)
     {
         if ($form_validator->get_data_completition()) {
-            $this->internal_proceed($form_validator);
+            $this->internal_proceed();
         } else {
-            echo "Wymagane pola nie są wypełnione.";
-            exit;
+            $this->create_response("error", "Wymagane pola nie sa wypelnione.");
         }
     }
-    function internal_proceed($form_validator)
+    private function internal_proceed()
     {
-        if ($form_validator->get_image_attachness()) {
-            if ($form_validator->get_is_image_type_correct()) {
-                $this->upload_image();
+        $image = new Image();
+
+        if ($image->get_attachness()) {
+            if ($image->get_type_correctness()) {
+                $image->upload();
                 $this->insert_data(true);
             } else {
-                echo "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.";
+                $this->create_response("error", "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.");
             }
         } else {
             $this->insert_data(false);
         }
     }
-    function upload_image()
-    {
-        $target_file_dir = QuestionInserter::$file_upload_dir . basename($_FILES["image"]["name"]);
-        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_dir);
-    }
 
-    function insert_data(bool $has_image)
+    private function insert_data(bool $has_image)
     {
         try {
             $connection = get_database_connection();
-
             $connection->query($this->get_question_insert_query($has_image));
             $question_id = $this->get_latest_question_id();
             $connection->query($this->get_answers_insert_query($question_id));
-            $response = array(
-                "status" => "success",
-                "message" => "Question successfully inserted."
-            );
+            $this->create_response("success", "Question successfully inserted.");
         } catch (Exception $e) {
-            $response = array(
-                "status" => "error",
-                "message" => "An error occurred. Please try again later."
-            );
+            $this->create_response("error", "An error occurred. Please try again later.");
         }
-        header('Content-Type: application/json');
-        echo json_encode($response);
+
+    }
+    private function create_response($status, $message)
+    {
+        $response = array(
+            "status" => $status,
+            "message" => $message
+        );
+        $JSON_response = json_encode($response);
+        echo $JSON_response;
+
     }
     function get_question_insert_query(bool $has_image): string
     {
@@ -162,7 +180,6 @@ class QuestionInserter
         return intval($row['id']);
     }
 }
-// $form_data = new FormData();
-$form_validator = new FormValidator();
+$form_validator = new FormDataValidator();
 new QuestionInserter($form_validator);
 ?>
