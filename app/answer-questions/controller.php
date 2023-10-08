@@ -7,25 +7,13 @@ class Question
     private string $content;
     private string|null $image_path;
 
-    public function set_id(int $id)
-    {
-        $this->id = $id;
-    }
     public function get_id(): int
     {
         return $this->id;
     }
-    public function set_content(string $content)
-    {
-        $this->content = $content;
-    }
     public function get_content(): string
     {
         return $this->content;
-    }
-    public function set_image_path(string|null $path)
-    {
-        $this->image_path = $path;
     }
     public function get_image_path(): string
     {
@@ -42,9 +30,9 @@ class Question
     {
         $connection = get_database_connection();
         $row = $connection->query($this->query)->fetch(PDO::FETCH_ASSOC);
-        $this->set_id(intval($row['id']));
-        $this->set_content($row['content']);
-        $this->set_image_path($row['image_path']);
+        $this->id = intval($row['id']);
+        $this->content = htmlspecialchars($row['content']);
+        $this->image_path = $row['image_path'];
         setcookie("question_id", $this->get_id());
     }
 }
