@@ -1,45 +1,31 @@
-$(".submit").on("click", function(){
+$(".submit").on("click", function () {
     checkAndSubmit(this.value);
 })
+
 function checkAndSubmit(userReplyAnswer) {
     $.ajax({
         type: "POST",
         url: "s-update-question-data.php",
         data: { user_reply_answer: userReplyAnswer },
-        success: (response) => { handleAjaxResponse(response, userReplyAnswer) },
-        error: (error) => { alert(error) }
+        success: handleAjaxResponse,
+        error: (error) => console.log(error)
     });
 }
-function handleAjaxResponse(textResponse, userReplyAnswer) {
-    response = JSON.parse(textResponse);
-    var is_correct = response.reply_correctness
-    if (is_correct) {
-        replySuccess(userReplyAnswer);
-    } else {
-        replyFailure(response, userReplyAnswer)
+
+function handleAjaxResponse(textResponse) {
+    const response = JSON.parse(textResponse);
+    const replyCorrectness = response.reply_correctness;
+
+    setElementBackground(response.user_reply_answer, replyCorrectness ? 'green' : 'red');
+    if (!replyCorrectness) {
+        setElementBackground(response.correct_answer, 'green');
     }
-}
-function replySuccess(userReplyAnswer) {
-    setElementBackground(userReplyAnswer, "green");
-    submitForm(1000);
-}
 
-function replyFailure(response, userReplyAnswer) {
-    setElementBackground(userReplyAnswer, "red");
-    var correct_answer = response.correct_answer;
-    setElementBackground(correct_answer, "green");
-    submitForm(1500);
-}
-
-function submitForm(timeout) {
-    setTimeout(() => { $("#form").submit() }, timeout);
+    const delay = replyCorrectness ? 1000 : 1500;
+    setTimeout(() => { $("#form").submit() }, delay);
 }
 
 function setElementBackground(value, color) {
-    var element = document.querySelector("input[value='" + value + "'");
+    var element = document.querySelector(`input[value='${value}'`);
     element.style.backgroundColor = color;
-}
-
-function getReplyCorrectness(response) {
-    return response.reply_correctness
 }
