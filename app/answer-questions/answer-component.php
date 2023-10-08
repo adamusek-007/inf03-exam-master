@@ -1,0 +1,1 @@
+<input type="button" class="submit" name="user-answer" value="<?= $answer ?>"><br>

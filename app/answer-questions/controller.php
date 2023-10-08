@@ -22,45 +22,54 @@ class Question
     public function print_image()
     {
         if (!is_null($this->image_path)) {
-            echo "<img alt=\"zdjecie do zadania\" src=\"../resources/images/{$this->image_path}\"'>";
+            $image_path = $this->image_path;
+            include("image-component.php");
         }
     }
 
-    function __construct()
+    function set_random_question()
     {
         $connection = get_database_connection();
         $row = $connection->query($this->query)->fetch(PDO::FETCH_ASSOC);
         $this->id = intval($row['id']);
         $this->content = htmlspecialchars($row['content']);
         $this->image_path = $row['image_path'];
+    }
+
+    function __construct()
+    {
+        $this->set_random_question();
         setcookie("question_id", $this->get_id());
     }
 }
-
 class Answers
 {
-    private string $query = "CALL getQuestionAnswers(%d);";
+    private string $query_pattern = "CALL getQuestionAnswers(%d);";
+    private string $query = "";
     private array $array = [];
-    function set_array($result)
+    function set_array(string $query)
     {
+        $connection = get_database_connection();
+        $result = $connection->query($query);
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            array_push($this->array, $row['content']);
+            array_push($this->array, htmlspecialchars($row['content']));
         }
+        shuffle($this->array);
     }
     function print()
     {
         foreach ($this->array as $answer) {
-            $answer = htmlspecialchars($answer);
-            echo "<input type=\"button\" class=\"submit\" name=\"user-answer\" value=\"{$answer}\"><br>";
+            include("answer-component.php");
         }
+    }
+    function set_query(int $question_id)
+    {
+        $this->query = sprintf($this->query_pattern, $question_id);
     }
     function __construct(int $question_id)
     {
-        $connection = get_database_connection();
-        $this->query = sprintf($this->query, $question_id);
-        $result = $connection->query($this->query);
-        $this->set_array($result);
-        shuffle($this->array);
+        $this->set_query($question_id);
+        $this->set_array($this->query);
     }
 
 }

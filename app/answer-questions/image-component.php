@@ -1,0 +1,1 @@
+<img alt="zdjecie do zadania" src="../resources/images/<?= $image_path ?>">
