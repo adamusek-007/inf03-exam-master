@@ -33,16 +33,28 @@ class QuestionReplyProcessor
     {
         setcookie("question_id", "", time() - 1);
     }
-
-    function __construct()
+    function escape_slashes()
     {
         $this->user_reply_answer = str_replace("\"", '\"', $_POST['user_reply_answer']);
+    }
+    function get_question_id()
+    {
         $this->question_id = intval($_COOKIE['question_id']);
-        $this->unset_cookie();
+    }
+    function __construct()
+    {
+        $this->escape_slashes();
+        $this->get_question_id();
         $this->add_question_reply();
         $this->is_reply_correct = $this->get_answer_correctness();
         $this->get_correct_answer();
-        $json = json_encode(array("reply_correctness" => $this->is_reply_correct, "correct_answer" => $this->correct_answer));
+        $json = json_encode(
+            array(
+                "reply_correctness" => $this->is_reply_correct,
+                "correct_answer" => $this->correct_answer,
+                "user_reply_answer" => $this->user_reply_answer
+            )
+        );
         echo $json;
     }
 }
