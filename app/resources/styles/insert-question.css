@@ -51,9 +51,9 @@ textarea {
 #message-box {
     text-align: center;
 }
-.message-success{
+.message-true{
     color:greenyellow;
 }
-.message-error{
+.message-false{
     color: red;
 }

@@ -23,8 +23,7 @@ $(document).ready(function () {
   function handleAjaxResponse(textResponse) {
     response = JSON.parse(textResponse);
     displayMessage(response.status, response.message);
-    // TODO CHANGE RESPONSE STATUS to true or false;
-    if(response.status = "success") {
+    if (response.status) {
       resetForm();
     }
   }
@@ -38,13 +37,12 @@ $(document).ready(function () {
   }
 
   function displayMessage(status, messageContent) {
-    
-    $("#message-box").addClass("message-"+status);
+    $("#message-box").addClass("message-" + status);
     $("#message-box").text(messageContent)
     setTimeout(clearMessageBox, 1500);
   }
 
-  function clearMessageBox(){
+  function clearMessageBox() {
     $("#message-box").text("");
     $("#message-box").removeClass();
   }

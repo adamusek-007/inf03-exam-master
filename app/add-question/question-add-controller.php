@@ -88,7 +88,7 @@ class QuestionInserter
         if ($form_validator->get_data_completition()) {
             $this->internal_proceed();
         } else {
-            $this->create_response("error", "Wymagane pola nie sa wypelnione.");
+            $this->create_response(FALSE, "Wymagane pola nie sa wypelnione.");
         }
     }
     private function internal_proceed()
@@ -100,13 +100,12 @@ class QuestionInserter
                 $image->upload();
                 $this->insert_data(TRUE);
             } else {
-                $this->create_response("error", "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.");
+                $this->create_response(FALSE, "Typ załączonego obrazu nie jest obsługiwany. \n Obsługiwane typy plików to: PNG, JPEG, JPG.");
             }
         } else {
             $this->insert_data(FALSE);
         }
     }
-
     private function insert_data(bool $has_image)
     {
         try {
@@ -114,13 +113,12 @@ class QuestionInserter
             $connection->query($this->get_question_insert_query($has_image));
             $question_id = $this->get_latest_question_id();
             $connection->query($this->get_answers_insert_query($question_id));
-            $this->create_response("success", "Pytanie pomyślnie dodane do bazy danych");
+            $this->create_response(TRUE, "Pytanie pomyślnie dodane do bazy danych");
         } catch (Exception $e) {
-            $this->create_response("error", "Wystąpił błąd: {$e}");
+            $this->create_response(FALSE, "Wystąpił błąd: {$e}");
         }
-
     }
-    private function create_response($status, $message)
+    private function create_response(bool $status, string $message)
     {
         $response = array(
             "status" => $status,

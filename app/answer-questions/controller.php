@@ -26,8 +26,7 @@ class Question
             include("image-component.php");
         }
     }
-
-    function set_random_question()
+    private function set_random_question()
     {
         $connection = get_database_connection();
         $row = $connection->query($this->query)->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +35,7 @@ class Question
         $this->image_path = $row['image_path'];
     }
 
-    function __construct()
+    public function __construct()
     {
         $this->set_random_question();
         setcookie("question_id", $this->get_id());
