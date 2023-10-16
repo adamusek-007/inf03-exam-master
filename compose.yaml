@@ -3,6 +3,7 @@ services:
     build: ./.build/app
     volumes:
       - ./app:/var/www/html
+      - ./db-config.php:/var/www/db-config.php
     ports:
       - 80:80
     expose:
