@@ -1,5 +1,5 @@
 <?php
-include("db-config.php");
+include("../../db-config.php");
 /**
  * Creates PDO connection Data Source Name (DSN).
  * 
@@ -14,9 +14,9 @@ function create_dsn()
 /**
  * Gets a PDO database connection.
  *
- * @return PDO|null A PDO database connection object, or null on failure.
+ * @return PDO A PDO database connection object, or null on failure.
  */
-function get_database_connection(): PDO|null
+function get_database_connection(): PDO
 {
     static $pdo;
 
