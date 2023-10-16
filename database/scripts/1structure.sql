@@ -30,7 +30,7 @@ CREATE TABLE `answers` (
   PRIMARY KEY (`id`),
   KEY `FK_anrs_ques_idx` (`ques_id`),
   CONSTRAINT `FK_answ_ques` FOREIGN KEY (`ques_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3389 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3389 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `questions` (
   `content` mediumtext NOT NULL,
   `image_path` tinytext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=857 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=857 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `replies` (
   PRIMARY KEY (`id`),
   KEY `FK_udat_anrs_idx` (`answ_id`),
   CONSTRAINT `FK_udat_anrs` FOREIGN KEY (`answ_id`) REFERENCES `answers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,11 +113,11 @@ SET character_set_client = @saved_cs_client;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addAnswer`(IN in_ques_id INT, IN in_content MEDIUMTEXT, IN in_is_correct BOOLEAN)
+CREATE  PROCEDURE `addAnswer`(IN in_ques_id INT, IN in_content MEDIUMTEXT, IN in_is_correct BOOLEAN)
 BEGIN
 	INSERT INTO `answers` (`content`, `is_correct`, `ques_id`) VALUES (in_content, in_is_correct, in_ques_id);
 END ;;
@@ -132,11 +132,10 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addQuestion`(IN in_content MEDIUMTEXT, IN in_has_img TINYINT(1), IN in_img_path TINYTEXT)
+CREATE  PROCEDURE `addQuestion`(IN in_content MEDIUMTEXT, IN in_has_img TINYINT(1), IN in_img_path TINYTEXT)
 BEGIN
 	IF in_has_img = 0 THEN
 		INSERT INTO `questions` (`content`) VALUES (in_content);
@@ -157,11 +156,10 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addQuestionReply`(IN in_ques_id INT, IN in_answer_content MEDIUMTEXT)
+CREATE  PROCEDURE `addQuestionReply`(IN in_ques_id INT, IN in_answer_content MEDIUMTEXT)
 BEGIN
     DECLARE answer_id INT;
 	IF (in_answer_content != "Nie wiem") THEN 
@@ -182,11 +180,10 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getAnswerCorrectness`(IN question_id INT, IN answer_content MEDIUMTEXT)
+CREATE  PROCEDURE `getAnswerCorrectness`(IN question_id INT, IN answer_content MEDIUMTEXT)
 BEGIN
 	DECLARE answer_id INT;
     
@@ -208,11 +205,10 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getLatestAddedQuestionId`()
+CREATE  PROCEDURE `getLatestAddedQuestionId`()
 BEGIN
 	SELECT `id` FROM `questions` ORDER BY `id` DESC LIMIT 1;
 END ;;
@@ -227,11 +223,10 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getQuestionAnswers`(IN in_ques_id INT)
+CREATE  PROCEDURE `getQuestionAnswers`(IN in_ques_id INT)
 BEGIN
 	SELECT `id`, `content`, `is_correct` FROM `answers` WHERE `ques_id` = in_ques_id;
 END ;;
@@ -246,11 +241,11 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getQuestionCorrectAnswer`(IN question_id INT)
+CREATE  PROCEDURE `getQuestionCorrectAnswer`(IN question_id INT)
 BEGIN
 	SELECT `content` FROM `answers` WHERE `is_correct` = 1 AND `ques_id` = question_id;
 END ;;
@@ -265,11 +260,11 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getQuestionsCardsView`()
+CREATE  PROCEDURE `getQuestionsCardsView`()
 BEGIN
   SELECT * FROM `v_questions_cards`;
 END ;;
@@ -284,11 +279,11 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getRandomQuestion`()
+CREATE  PROCEDURE `getRandomQuestion`()
 BEGIN
   SELECT * FROM `questions`order by rand() limit 1;
 END ;;
@@ -303,11 +298,11 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `getSummaryStats`()
+CREATE PROCEDURE `getSummaryStats`()
 BEGIN
 SELECT SUM(answer_correctness) as `total_correct_replies`, COUNT(question_id) as `total_replies`, COUNT(question_id)-SUM(answer_correctness) as `total_incorrect_replies` FROM v_all_replies_data;
 END ;;
@@ -327,9 +322,8 @@ DELIMITER ;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
 /*!50001 SET character_set_client      = utf8mb4 */;
 /*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013  SQL SECURITY DEFINER */
 /*!50001 VIEW `v_all_replies_data` AS select `replies`.`id` AS `reply_id`,`replies`.`view_date_time` AS `reply_date_time`,`replies`.`answ_id` AS `answer_id`,`answers`.`content` AS `answer_content`,`answers`.`is_correct` AS `answer_correctness`,`questions`.`id` AS `question_id`,`questions`.`content` AS `question_content` from ((`replies` join `answers` on((`replies`.`answ_id` = `answers`.`id`))) join `questions` on((`answers`.`ques_id` = `questions`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
@@ -345,9 +339,8 @@ DELIMITER ;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
 /*!50001 SET character_set_client      = utf8mb4 */;
 /*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50013  SQL SECURITY DEFINER */
 /*!50001 VIEW `v_questions_cards` AS select max(`v_all_replies_data`.`reply_date_time`) AS `last_seen`,count(`v_all_replies_data`.`answer_id`) AS `reply_count`,`v_all_replies_data`.`question_id` AS `question_id`,`v_all_replies_data`.`question_content` AS `question_content`,(select count(`replies`.`id`) from (`replies` join `answers` on((`replies`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 1))) AS `correct_replies`,(select count(`replies`.`id`) from (`replies` join `answers` on((`replies`.`answ_id` = `answers`.`id`))) where ((`answers`.`ques_id` = `v_all_replies_data`.`question_id`) and (`answers`.`is_correct` = 0))) AS `incorrect_replies` from `v_all_replies_data` group by `v_all_replies_data`.`question_id` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
