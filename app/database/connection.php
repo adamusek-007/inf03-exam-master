@@ -1,5 +1,5 @@
 <?php
-include("./db-config.php");
+include("db-config.php");
 /**
  * Creates PDO connection Data Source Name (DSN).
  * 
