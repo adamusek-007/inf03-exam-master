@@ -1,38 +1,31 @@
 <?php
 class ViewGenereator
 {
+    const GET_ARRAY_SIZE = 1;
+    const REQUEST_METHOD = 'GET';
     private function get_view_generating_type()
     {
-        if ($this->is_get_request()) {
-            $get_size = $this->check_get_request_size();
-            if ($get_size == 1) {
-                if ($this->check_get_variable_name()) {
-                    if ($this->check_get_variable_data_type()) {
-                        return "question";
-                    }
-                } else {
-                    return "questions";
-                }
-            } else {
-                return "questions";
+        if ($this->is_get_request() && $this->is_array_size_correct($this::GET_ARRAY_SIZE, $_GET)) {
+            if ($this->is_variable_name_correct() && $this->is_variable_data_type_correct()) {
+                return "question";
             }
-        } else {
-            return "questions";
         }
+        return "questions";
+
     }
-    private function is_get_request()
+    private function is_array_size_correct(int $expected_size, array $array): bool
     {
-        return "GET" == $_SERVER['REQUEST_METHOD'];
+        return $expected_size === sizeof($array);
     }
-    private function check_get_request_size()
+    private function is_get_request(): bool
     {
-        return sizeof($_GET);
+        return $this::REQUEST_METHOD == $_SERVER['REQUEST_METHOD'];
     }
-    private function check_get_variable_name()
+    private function is_variable_name_correct():bool
     {
         return array_key_exists("question-id", $_GET);
     }
-    private function check_get_variable_data_type()
+    private function is_variable_data_type_correct(): bool
     {
         $pattern = '/[0-9]+/';
         return preg_match($pattern, $_GET['question-id']);
