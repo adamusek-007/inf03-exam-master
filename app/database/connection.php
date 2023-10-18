@@ -7,7 +7,7 @@ include("../../db-config.php");
  */
 function create_dsn(): string
 {
-    $dsn_format = " ";
+    $dsn_format = "mysql:host=%s;dbname=%s;port=%s;charset=utf8";
     return sprintf($dsn_format, DB_HOST, DB_NAME, DB_PORT);
 }
 
