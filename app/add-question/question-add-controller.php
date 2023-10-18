@@ -18,7 +18,7 @@ class Image
     {
         return $this->name;
     }
-    private function check_is_image_attached()
+    private function check_is_image_attached(): void
     {
         $this->is_attached = (
             array_key_exists("image", $_FILES) &&
@@ -26,12 +26,12 @@ class Image
             $_FILES["image"]["type"] !== ""
         );
     }
-    private function check_is_type_correct()
+    private function check_is_type_correct(): void
     {
         $uploaded_file_type = $_FILES["image"]["type"];
         $this->is_type_correct = in_array($uploaded_file_type, Image::$supported_file_types);
     }
-    public function upload()
+    public function upload(): void
     {
         $target_file_dir = QuestionInserter::$file_upload_dir . basename($_FILES["image"]["name"]);
         move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_dir);
@@ -64,7 +64,7 @@ class FormFieldsValidator
     {
         return $this->data_completition;
     }
-    private function check_data_completion()
+    private function check_data_completion(): void
     {
         foreach ($this::$expected_data_fields as $field_name) {
             if (!isset($_POST[$field_name]) || empty($_POST[$field_name])) {
@@ -91,7 +91,7 @@ class QuestionInserter
             $this->create_response(FALSE, "Wymagane pola nie sa wypelnione.");
         }
     }
-    private function internal_proceed()
+    private function internal_proceed(): void
     {
         $image = new Image();
 
@@ -106,7 +106,7 @@ class QuestionInserter
             $this->insert_data(FALSE);
         }
     }
-    private function insert_data(bool $has_image)
+    private function insert_data(bool $has_image):void
     {
         try {
             $connection = get_database_connection();
@@ -118,7 +118,7 @@ class QuestionInserter
             $this->create_response(FALSE, "Wystąpił błąd: {$e}");
         }
     }
-    private function create_response(bool $status, string $message)
+    private function create_response(bool $status, string $message):void
     {
         $response = array(
             "status" => $status,
@@ -137,7 +137,7 @@ class QuestionInserter
             return sprintf($add_question_query, $_POST['content'], $has_image, 'NULL');
         }
     }
-    private function get_answers_insert_query(int $question_id)
+    private function get_answers_insert_query(int $question_id): string
     {
         $query = "";
         $q_add_answer = "CALL addAnswer(%d, \"%s\", %d);";
@@ -152,7 +152,7 @@ class QuestionInserter
         return $query;
 
     }
-    private function get_latest_question_id()
+    private function get_latest_question_id(): int
     {
         $connection = get_database_connection();
         $row = $connection->query("CALL getLatestAddedQuestionId();")->fetch(PDO::FETCH_ASSOC);

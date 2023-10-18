@@ -5,9 +5,9 @@ include("../../db-config.php");
  * 
  * @return string The PDO DSN.
  */
-function create_dsn()
+function create_dsn(): string
 {
-    $dsn_format = "mysql:host=%s;dbname=%s;port=%s;charset=utf8";
+    $dsn_format = " ";
     return sprintf($dsn_format, DB_HOST, DB_NAME, DB_PORT);
 }
 

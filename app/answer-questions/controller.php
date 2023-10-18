@@ -19,14 +19,14 @@ class Question
     {
         return $this->image_path;
     }
-    public function print_image()
+    public function print_image(): void
     {
         if (!is_null($this->image_path)) {
             $image_path = $this->image_path;
             include("image-component.php");
         }
     }
-    private function set_random_question()
+    private function set_random_question(): void
     {
         $connection = get_database_connection();
         $row = $connection->query($this->query)->fetch(PDO::FETCH_ASSOC);
@@ -46,7 +46,7 @@ class Answers
     private string $query_pattern = "CALL getQuestionAnswers(%d);";
     private string $query = "";
     private array $array = [];
-    function set_array(string $query)
+    function set_array(string $query): void
     {
         $connection = get_database_connection();
         $result = $connection->query($query);
@@ -55,13 +55,13 @@ class Answers
         }
         shuffle($this->array);
     }
-    function print()
+    function print(): void
     {
         foreach ($this->array as $answer) {
             include("answer-component.php");
         }
     }
-    function set_query(int $question_id)
+    function set_query(int $question_id): void
     {
         $this->query = sprintf($this->query_pattern, $question_id);
     }

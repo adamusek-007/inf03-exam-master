@@ -7,7 +7,7 @@ class QuestionReplyProcessor
     private bool $is_reply_correct;
     private string $correct_answer;
 
-    function add_question_reply()
+    function add_question_reply(): void
     {
         $connection = get_database_connection();
         $query = "CALL addQuestionReply({$this->question_id}, \"{$this->user_reply_answer}\");";
@@ -20,7 +20,7 @@ class QuestionReplyProcessor
         $row = $connection->query($query)->fetch(PDO::FETCH_ASSOC);
         return $row['is_correct'];
     }
-    function get_correct_answer()
+    function get_correct_answer(): void
     {
         $connection = get_database_connection();
         $query = "CALL getQuestionCorrectAnswer({$this->question_id});";
@@ -29,15 +29,15 @@ class QuestionReplyProcessor
         $this->correct_answer = $correct_answer;
     }
 
-    function unset_cookie()
+    function unset_cookie(): void
     {
         setcookie("question_id", "", time() - 1);
     }
-    function escape_slashes()
+    function escape_slashes(): void
     {
         $this->user_reply_answer = str_replace("\"", '\"', $_POST['user_reply_answer']);
     }
-    function get_question_id()
+    function get_question_id(): void
     {
         $this->question_id = intval($_COOKIE['question_id']);
     }

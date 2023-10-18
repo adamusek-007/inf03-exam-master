@@ -3,7 +3,7 @@ class ViewGenereator
 {
     const GET_ARRAY_SIZE = 1;
     const REQUEST_METHOD = 'GET';
-    private function get_view_generating_type()
+    private function get_view_generating_type(): string
     {
         if ($this->is_get_request() && $this->is_array_size_correct($this::GET_ARRAY_SIZE, $_GET)) {
             if ($this->is_variable_name_correct() && $this->is_variable_data_type_correct()) {
@@ -21,7 +21,7 @@ class ViewGenereator
     {
         return $this::REQUEST_METHOD == $_SERVER['REQUEST_METHOD'];
     }
-    private function is_variable_name_correct():bool
+    private function is_variable_name_correct(): bool
     {
         return array_key_exists("question-id", $_GET);
     }
@@ -42,10 +42,10 @@ class ViewGenereator
 }
 class QuestionsCardsView
 {
-    private $summary_sql = "CALL getSummaryStats();";
-    private $sql = "CALL getQuestionsCardsView();";
+    private string $summary_sql = "CALL getSummaryStats();";
+    private string $sql = "CALL getQuestionsCardsView();";
 
-    function get_each_question_stats($connection)
+    function get_each_question_stats($connection): void
     {
         $result = $connection->query($this->sql);
         echo "<main>";
@@ -58,7 +58,7 @@ class QuestionsCardsView
         echo "</main>";
     }
 
-    function get_summary_stats($connection)
+    function get_summary_stats($connection): void
     {
         $row = $connection->query($this->summary_sql)->fetch(PDO::FETCH_ASSOC);
         ;
@@ -81,7 +81,7 @@ class QuestionCardView
 {
     private $question_id;
 
-    private function genreate_view($connection)
+    private function genreate_view($connection): void
     {
         $top = new QuestionCardTop($connection);
         $mid = new QuestionCardMid($connection);
@@ -103,25 +103,25 @@ class QuestionCardView
 }
 class QuestionCardTop
 {
-    private $question_content;
+    private string $question_content;
 
-    private $question_image;
+    private string $question_image;
 
-    private $question_answers;
+    private array $question_answers;
 
-    public function get_question_answers()
+    public function get_question_answers(): array
     {
         return $this->question_answers;
     }
-    public function get_question_content()
+    public function get_question_content(): string
     {
         return $this->question_content;
     }
-    public function get_question_image()
+    public function get_question_image(): string
     {
         return $this->question_image;
     }
-    function set_question_content_and_image($question_id, $connection)
+    function set_question_content_and_image($question_id, $connection): void
     {
         $sql = "SELECT `questions`.`content` as `question_content`, `questions`.`image_path` as `question_image` FROM `questions` WHERE `id` = {$question_id};";
         $row = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
@@ -129,7 +129,7 @@ class QuestionCardTop
         $this->question_image = $row['question_image'];
     }
 
-    function set_question_answers($question_id, $connection)
+    function set_question_answers($question_id, $connection): void
     {
         $sql = "CALL getQuestionAnswers({$question_id});";
         $result = $connection->query($sql);
@@ -148,7 +148,7 @@ class QuestionCardTop
 }
 class QuestionCardMid
 {
-    function generate_svg_chart()
+    function generate_svg_chart(): void
     {
 
     }
@@ -161,9 +161,9 @@ class QuestionCardMid
 }
 class QuestionCardBottom
 {
-    private $replies;
+    private array $replies;
 
-    public function get_replies()
+    public function get_replies(): array
     {
         return $this->replies;
     }
