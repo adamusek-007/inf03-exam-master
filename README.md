@@ -12,7 +12,8 @@ You can run app by yourself by cloning this repository and then running it.
 
 ## Installation and running
 
-You need to have [docker](https://www.docker.com/) installed and runinng
+You need to have [docker](https://www.docker.com/) for runinng app.
+[Git](https://git-scm.com/) is optional (you can download zip version of this repository)
 
 ```
 git clone https://github.com/adamusek-007/inf03-exam-master.git
@@ -31,34 +32,38 @@ And after image building and runnig it should be able at 127.0.0.1 or localhost.
 
 ## Tech stack
 
-### Server
+### Frontend
 
-- Apache2
+- HTML v.5
+- JavaScript v.ES6
+  - Ajax 
+  - jQuery v.3.7.1
+- CSS v.3
+  
+### Backend
 
-### Datababase
-
-- MySQL
-
-### Languages
-
-- JavaScript
-  - jQuery
-  - Ajax
-- HTML5
-- CSS3
-- PHP
-- Java (not in this repo and not in any other)
-
+- Apache HTTP Server v.2.4.43
+- PHP v.8.2 (OO)
+- MySQL 8.0
+  - Stored procedures
+ 
 ### Tools
-
-- VSCode
-- Eclipse (for Java)
-- Docker
-- Selenium (not in this repo and not in any other)
-
-### Version control
-
-- Git
+- **Containers**
+  - Docker
+- **Version control**
+   - Git
+   - Github
+- **Project management**
+  - Github projects (like Jira)
+- **IDE**
+  - VSCode
+  - Eclipse for Java
+- **CLI**
+  - PowerShell
+  - Bash
+- **Other usage**
+  - Java v.17.0.8 (not included in repo)
+  - Selenium for Selenium v.3.141.59 (not included in repo)
 
 # Disclaimer
 
