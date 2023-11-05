@@ -3,18 +3,28 @@
 
 <head>
     <title>Nauka INF.03</title>
-	<meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-Ua-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="./resources/styles/index.css">
 </head>
 
 <body>
-    <section id="mode-selection">
-        <div><a href="./add-question"><span>Dodaj pytanie</span></a></div>
-        <div><a href="./select-mode">Ucz się</a></div>
-        <div><a href="./stats">Statystyki</a></div>
-    </section>
+    <main>
+        <button id="add-question" class="navigation-button">Dodaj pytanie</button>
+        <button id="select-mode" class="navigation-button">Ucz się</button>
+        <button id="stats" class="navigation-button">Statystyki</button>
+    </main>
+    <script src="./resources/jquery/script.js"></script>
+    <script>
+        $(document).ready(() => {
+            $(".navigation-button").click(() => {
+                let destination = $(this).attr("id");
+                window.location.href = "./" + destination;
+            });
+        });
+    </script>
 </body>
+
 
 </html>
