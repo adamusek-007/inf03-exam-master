@@ -17,11 +17,12 @@
     </main>
     <script src="./resources/jquery/script.js"></script>
     <script>
-        $(document).ready(() => {
-            $(".navigation-button").click(() => {
-                let destination = $(this).attr("id");
-                window.location.href = "./" + destination;
-            });
+        let buttons = document.querySelectorAll("button");
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                let destination = button.getAttribute("id");
+                window.location.href += "/" + destination
+            })
         });
     </script>
 </body>
