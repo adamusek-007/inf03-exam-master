@@ -17,7 +17,7 @@ class Answers
     function print(): void
     {
         foreach ($this->array as $answer) {
-            include("answer-component.php");
+            include("components/answer-component.php");
         }
     }
     function set_query(int $question_id): void

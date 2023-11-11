@@ -23,7 +23,7 @@ class Question
     {
         if (!is_null($this->image_path)) {
             $image_path = $this->image_path;
-            include("image-component.php");
+            include("components/image-component.php");
         }
     }
     private function set_random_question(): void
