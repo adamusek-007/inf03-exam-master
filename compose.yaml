@@ -1,6 +1,6 @@
 services:
   app:
-    build: ./.build/app
+    build: docker/app
     volumes:
       - ./app:/var/www/html
       - ./db-config.php:/var/www/db-config.php
@@ -12,7 +12,7 @@ services:
       database:
         condition: service_healthy
   database:
-    build: ./.build/database
+    build: docker/database
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: egzamin_zawodowy
