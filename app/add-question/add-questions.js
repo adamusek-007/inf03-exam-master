@@ -1,4 +1,4 @@
-let form = document.querySelector("form");
+const form = document.querySelector("form");
 
 if (form !== null) {
   form.addEventListener("submit", (event) => {
@@ -16,23 +16,23 @@ function handleFormSubmit(form) {
 }
 
 function validateRequiredFieldsData(form) {
-  let isValid = true;
-  let fields = form.querySelectorAll("textarea");
-  fields.forEach((field) => {
+  const fields = form.querySelectorAll("textarea");
+  for (const field of fields) {
     if (field.value === "") {
-      isValid = false;
       return false;
     }
-  });
-  return isValid;
+  }
+  return true;
 }
 
 function displayMessage(status, messageContent) {
-  let messageBox = document.querySelector("#message-box");
-  if (messageBox != null) {
-    let className = "message-" + status;
+  const messageBox = document.querySelector("#message-box");
+
+  if (messageBox !== null) {
+    const className = "message-" + status;
     messageBox.classList.add(className);
     messageBox.innerHTML = messageContent;
+
     setTimeout(() => {
       clearMessageBox(messageBox, className);
     }, 1500);
@@ -45,18 +45,21 @@ function clearMessageBox(messageBox, className) {
 }
 
 function makeAjaxRequest(formData) {
-  let xhttp = new XMLHttpRequest();
-  let type = "POST";
-  let url = "question-add-controller.php";
+  const xhttp = new XMLHttpRequest();
+  const type = "POST";
+  const url = "question-add-controller.php";
   xhttp.open(type, url, true);
 
   xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      handleAjaxResponse(this.response);
-    } else {
-      handleAjaxError(this.statusText);
+    if (this.readyState == 4) {
+      if (this.status == 200) {
+        handleAjaxResponse(this.response);
+      } else {
+        handleAjaxError(this.statusText);
+      }
     }
   };
+
   xhttp.send(formData);
 }
 
@@ -65,14 +68,18 @@ function handleAjaxError(error) {
 }
 
 function handleAjaxResponse(textResponse) {
-  let response = JSON.parse(textResponse);
+  const response = JSON.parse(textResponse);
   displayMessage(response.status, response.message);
+
   if (response.status) {
     resetForm();
   }
 }
 
 function resetForm() {
-  let form = document.querySelector("form");
-  if (form != null) form.reset();
+  const form = document.querySelector("form");
+
+  if (form !== null) {
+    form.reset();
+  }
 }
