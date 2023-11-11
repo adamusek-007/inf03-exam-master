@@ -3,7 +3,7 @@ class QuestionCardTop
 {
     private string $question_content;
 
-    private string $question_image;
+    private string $question_image = "";
 
     private array $question_answers;
 
@@ -24,7 +24,9 @@ class QuestionCardTop
         $sql = "SELECT `questions`.`content` as `question_content`, `questions`.`image_path` as `question_image` FROM `questions` WHERE `id` = {$question_id};";
         $row = $connection->query($sql)->fetch(PDO::FETCH_ASSOC);
         $this->question_content = $row['question_content'];
-        $this->question_image = $row['question_image'];
+        if (!is_null($row['question_image'])) {
+            $this->question_image = $row['question_image'];
+        }
     }
 
     function set_question_answers($question_id, $connection): void
