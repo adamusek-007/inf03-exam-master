@@ -8,16 +8,7 @@ body {
     background-color: #212529;
 }
 
-a {
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-section {
+main {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,15 +16,19 @@ section {
     margin-right: auto;
     width: fit-content;
 }
-span {
-    margin: 20px;
-}
-div {
-    width: 100%;
-    height: 60px;
+
+button {
     background-color: #17181a;
-    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    /* border: #a1a1a1 1px solid; */
+
 }
-div:hover {
+
+button+button {
+    margin-top: 10px;
+}
+
+button:hover {
     background-color: #121212;
 }
