@@ -20,7 +20,6 @@ class QuestionsCardsView
     function get_summary_stats($connection): void
     {
         $row = $connection->query($this->summary_sql)->fetch(PDO::FETCH_ASSOC);
-        ;
         extract($row);
         if ($total_replies != 0) {
             $total_correct_procentage = $total_correct_replies / ($total_replies) * 100;
