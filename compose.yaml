@@ -25,3 +25,12 @@ services:
       interval: 10s
       timeout: 20s
       retries: 10
+  data-visualisation:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    depends_on:
+      database:
+        condition: service_healthy
+    # volumes:
+      # - /docker_data/grafana:/var/lib/grafana
