@@ -5,10 +5,10 @@ class QuestionInserter
 
     public function __construct(FormFieldsValidator $form_validator)
     {
-        if ($form_validator->get_data_completition()) {
+        if ($form_validator->get_data_completion()) {
             $this->internal_proceed();
         } else {
-            $this->create_response(FALSE, "Wymagane pola nie sa wypelnione.");
+            $this->create_response(FALSE, "Wymagane pola nie sa wypełnione.");
         }
     }
     private function internal_proceed(): void
@@ -53,9 +53,9 @@ JPG.");
     {
         $add_question_query = "CALL addQuestion(\"%s\", %d, \"%s\");";
         if ($has_image) {
-            return sprintf($add_question_query, $_POST['content'], $has_image, $_FILES["image"]["name"]);
+            return sprintf($add_question_query, $_POST['content'], true, $_FILES["image"]["name"]);
         } else {
-            return sprintf($add_question_query, $_POST['content'], $has_image, 'NULL');
+            return sprintf($add_question_query, $_POST['content'], false, 'NULL');
         }
     }
     private function get_answers_insert_query(int $question_id): string

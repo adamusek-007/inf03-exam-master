@@ -1,7 +1,7 @@
 <?php
 class FormFieldsValidator
 {
-    private bool $data_completition;
+    private bool $data_completion;
 
     public static array $expected_data_fields =
         [
@@ -12,19 +12,19 @@ class FormFieldsValidator
             "w-answer-3"
         ];
 
-    public function get_data_completition(): bool
+    public function get_data_completion(): bool
     {
-        return $this->data_completition;
+        return $this->data_completion;
     }
     private function check_data_completion(): void
     {
         foreach ($this::$expected_data_fields as $field_name) {
-            if (!isset($_POST[$field_name]) || empty($_POST[$field_name])) {
-                $this->data_completition = FALSE;
+            if (empty($_POST[$field_name])) {
+                $this->data_completion = FALSE;
                 return;
             }
         }
-        $this->data_completition = TRUE;
+        $this->data_completion = TRUE;
     }
     public function __construct()
     {
