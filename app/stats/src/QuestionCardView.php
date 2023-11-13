@@ -15,7 +15,7 @@ class QuestionCardView
 
         $replies = $bottom->get_replies();
 
-        include("./question-card.php");
+        include("question-card.php");
     }
     function __construct($connection)
     {
